@@ -1,0 +1,520 @@
+{
+  "summary": {
+    "total": 50,
+    "strict_matches": 44,
+    "strict_accuracy_pct": 88.0,
+    "tilt_accuracy_pct": 92.0,
+    "uncertain_count": 3,
+    "precision_pct": 88.89,
+    "recall_pct": 96.0,
+    "f1_pct": 92.31,
+    "confusion_matrix": {
+      "true_fake_pred_fake_TN": 22,
+      "true_fake_pred_real_FP": 3,
+      "true_real_pred_fake_FN": 1,
+      "true_real_pred_real_TP": 24
+    }
+  },
+  "items": [
+    {
+      "id": 1,
+      "headline": "Federal Reserve maintains interest rates following steady quarterly economic indicators.",
+      "domain": "Economy",
+      "ground_truth": "REAL",
+      "predicted_verdict": "REAL",
+      "confidence": 85.9,
+      "credibility_score": 86,
+      "rule_flags": 0
+    },
+    {
+      "id": 2,
+      "headline": "European Space Agency launches Euclid observatory to map the dark universe geometry.",
+      "domain": "Science",
+      "ground_truth": "REAL",
+      "predicted_verdict": "REAL",
+      "confidence": 88.2,
+      "credibility_score": 88,
+      "rule_flags": 0
+    },
+    {
+      "id": 3,
+      "headline": "World Health Organization issues updated global guidance on sodium reduction targets.",
+      "domain": "Health",
+      "ground_truth": "REAL",
+      "predicted_verdict": "REAL",
+      "confidence": 89.4,
+      "credibility_score": 89,
+      "rule_flags": 0
+    },
+    {
+      "id": 4,
+      "headline": "Supreme Court agrees to review appellate decision on interstate water rights compact.",
+      "domain": "Law",
+      "ground_truth": "REAL",
+      "predicted_verdict": "REAL",
+      "confidence": 88.5,
+      "credibility_score": 88,
+      "rule_flags": 0
+    },
+    {
+      "id": 5,
+      "headline": "Solar capacity additions surpass coal generation across regional electricity grid.",
+      "domain": "Energy",
+      "ground_truth": "REAL",
+      "predicted_verdict": "REAL",
+      "confidence": 71.9,
+      "credibility_score": 72,
+      "rule_flags": 0
+    },
+    {
+      "id": 6,
+      "headline": "Treasury Department issues new compliance guidelines for cross-border digital payments.",
+      "domain": "Finance",
+      "ground_truth": "REAL",
+      "predicted_verdict": "REAL",
+      "confidence": 88.5,
+      "credibility_score": 89,
+      "rule_flags": 0
+    },
+    {
+      "id": 7,
+      "headline": "Global semiconductor alliance pledges 40 billion dollars in joint domestic fabrication plants.",
+      "domain": "Technology",
+      "ground_truth": "REAL",
+      "predicted_verdict": "REAL",
+      "confidence": 87.7,
+      "credibility_score": 88,
+      "rule_flags": 0
+    },
+    {
+      "id": 8,
+      "headline": "Department of Transportation announces competitive grants for regional rural airport upgrades.",
+      "domain": "Infrastructure",
+      "ground_truth": "REAL",
+      "predicted_verdict": "REAL",
+      "confidence": 79.9,
+      "credibility_score": 80,
+      "rule_flags": 0
+    },
+    {
+      "id": 9,
+      "headline": "National Weather Service upgrades coastal storm forecasting radar infrastructure.",
+      "domain": "Weather",
+      "ground_truth": "REAL",
+      "predicted_verdict": "REAL",
+      "confidence": 88.8,
+      "credibility_score": 89,
+      "rule_flags": 0
+    },
+    {
+      "id": 10,
+      "headline": "Marine biologists discover thriving coral sanctuary resilient to temperature spikes.",
+      "domain": "Environment",
+      "ground_truth": "REAL",
+      "predicted_verdict": "REAL",
+      "confidence": 87.0,
+      "credibility_score": 87,
+      "rule_flags": 0
+    },
+    {
+      "id": 11,
+      "headline": "International Maritime Organization ratifies net-zero greenhouse gas framework for cargo shipping.",
+      "domain": "Policy",
+      "ground_truth": "REAL",
+      "predicted_verdict": "REAL",
+      "confidence": 83.0,
+      "credibility_score": 83,
+      "rule_flags": 0
+    },
+    {
+      "id": 12,
+      "headline": "FDA grants accelerated approval to breakthrough targeted immunotherapy for lung cancer.",
+      "domain": "Medicine",
+      "ground_truth": "REAL",
+      "predicted_verdict": "REAL",
+      "confidence": 89.0,
+      "credibility_score": 89,
+      "rule_flags": 0
+    },
+    {
+      "id": 13,
+      "headline": "Automotive manufacturers sign shared standards for next-generation electric vehicle charging.",
+      "domain": "Industry",
+      "ground_truth": "REAL",
+      "predicted_verdict": "REAL",
+      "confidence": 80.6,
+      "credibility_score": 81,
+      "rule_flags": 0
+    },
+    {
+      "id": 14,
+      "headline": "Archeological team unearths 3,000-year-old administrative complex in eastern Mediterranean.",
+      "domain": "History",
+      "ground_truth": "REAL",
+      "predicted_verdict": "REAL",
+      "confidence": 85.6,
+      "credibility_score": 86,
+      "rule_flags": 0
+    },
+    {
+      "id": 15,
+      "headline": "United Nations humanitarian convoy delivers medical supplies to drought-affected regions.",
+      "domain": "World",
+      "ground_truth": "REAL",
+      "predicted_verdict": "REAL",
+      "confidence": 87.4,
+      "credibility_score": 87,
+      "rule_flags": 0
+    },
+    {
+      "id": 16,
+      "headline": "Department of Agriculture forecasts record soybean harvest bolstered by modern irrigation.",
+      "domain": "Agriculture",
+      "ground_truth": "REAL",
+      "predicted_verdict": "REAL",
+      "confidence": 78.5,
+      "credibility_score": 78,
+      "rule_flags": 0
+    },
+    {
+      "id": 17,
+      "headline": "Labor Department reports 185,000 new nonfarm payroll jobs added during past month.",
+      "domain": "Economy",
+      "ground_truth": "REAL",
+      "predicted_verdict": "UNCERTAIN",
+      "confidence": 57.4,
+      "credibility_score": 57,
+      "rule_flags": 0
+    },
+    {
+      "id": 18,
+      "headline": "Nordic countries expand cross-border cybersecurity sharing pact against critical infrastructure threats.",
+      "domain": "Cybersecurity",
+      "ground_truth": "REAL",
+      "predicted_verdict": "REAL",
+      "confidence": 83.0,
+      "credibility_score": 83,
+      "rule_flags": 0
+    },
+    {
+      "id": 19,
+      "headline": "NASA Rover discovers organic molecules preserved in ancient Martian river delta siltstone.",
+      "domain": "Space",
+      "ground_truth": "REAL",
+      "predicted_verdict": "UNCERTAIN",
+      "confidence": 53.3,
+      "credibility_score": 47,
+      "rule_flags": 0
+    },
+    {
+      "id": 20,
+      "headline": "Municipal transit authority introduces contactless open-loop payment across entire train network.",
+      "domain": "Transit",
+      "ground_truth": "REAL",
+      "predicted_verdict": "REAL",
+      "confidence": 75.3,
+      "credibility_score": 75,
+      "rule_flags": 0
+    },
+    {
+      "id": 21,
+      "headline": "Public health agencies recommend seasonal bivalent influenza vaccinations ahead of winter.",
+      "domain": "Health",
+      "ground_truth": "REAL",
+      "predicted_verdict": "REAL",
+      "confidence": 79.5,
+      "credibility_score": 79,
+      "rule_flags": 0
+    },
+    {
+      "id": 22,
+      "headline": "International Monetary Fund projects steady 3.1 percent global output growth in annual outlook.",
+      "domain": "Finance",
+      "ground_truth": "REAL",
+      "predicted_verdict": "REAL",
+      "confidence": 83.7,
+      "credibility_score": 84,
+      "rule_flags": 0
+    },
+    {
+      "id": 23,
+      "headline": "Antarctic research station records winter sea ice extent via satellite radar telemetry.",
+      "domain": "Climate",
+      "ground_truth": "REAL",
+      "predicted_verdict": "REAL",
+      "confidence": 80.0,
+      "credibility_score": 80,
+      "rule_flags": 0
+    },
+    {
+      "id": 24,
+      "headline": "Civil engineering consortium tests seismic retrofits on historical suspension bridge.",
+      "domain": "Engineering",
+      "ground_truth": "REAL",
+      "predicted_verdict": "REAL",
+      "confidence": 78.4,
+      "credibility_score": 78,
+      "rule_flags": 0
+    },
+    {
+      "id": 25,
+      "headline": "Bipartisan senate panel introduces standardized algorithmic transparency standards for AI platforms.",
+      "domain": "Technology",
+      "ground_truth": "REAL",
+      "predicted_verdict": "REAL",
+      "confidence": 79.6,
+      "credibility_score": 80,
+      "rule_flags": 0
+    },
+    {
+      "id": 26,
+      "headline": "BOMBSHELL: Bill Gates Admits Microchips in Drinking Water Control Civilian Heartbeats!",
+      "domain": "Conspiracy",
+      "ground_truth": "FAKE",
+      "predicted_verdict": "FAKE",
+      "confidence": 86.8,
+      "credibility_score": 0,
+      "rule_flags": 3
+    },
+    {
+      "id": 27,
+      "headline": "Secret NASA Whistleblower Confirms Earth is Enclosed by an Ancient Glass Dome!",
+      "domain": "Conspiracy",
+      "ground_truth": "FAKE",
+      "predicted_verdict": "FAKE",
+      "confidence": 88.4,
+      "credibility_score": 0,
+      "rule_flags": 3
+    },
+    {
+      "id": 28,
+      "headline": "Drinking Boiled Garlic and Bleach Kills Every Virus in 10 Minutes Doctors Beg You Not to Read!",
+      "domain": "Health",
+      "ground_truth": "FAKE",
+      "predicted_verdict": "FAKE",
+      "confidence": 89.3,
+      "credibility_score": 0,
+      "rule_flags": 2
+    },
+    {
+      "id": 29,
+      "headline": "UN Declares All Private Property Banned Starting Tomorrow Morning at 6 AM!",
+      "domain": "Disinformation",
+      "ground_truth": "FAKE",
+      "predicted_verdict": "FAKE",
+      "confidence": 65.2,
+      "credibility_score": 15,
+      "rule_flags": 2
+    },
+    {
+      "id": 30,
+      "headline": "SHOCKING VIDEO: Alien Spaceship Caught Refueling From Solar Flares Over Nevada!",
+      "domain": "Sensationalism",
+      "ground_truth": "FAKE",
+      "predicted_verdict": "FAKE",
+      "confidence": 76.2,
+      "credibility_score": 0,
+      "rule_flags": 3
+    },
+    {
+      "id": 31,
+      "headline": "Global Elites Plan to Poison All Farm Vegetables to Force People into Lab-Grown Insect Slime!",
+      "domain": "Conspiracy",
+      "ground_truth": "FAKE",
+      "predicted_verdict": "FAKE",
+      "confidence": 61.8,
+      "credibility_score": 18,
+      "rule_flags": 2
+    },
+    {
+      "id": 32,
+      "headline": "Eating Two Raw Onions Before Sleep Permanently Reverses Baldness and Blindness in 3 Days!",
+      "domain": "Health",
+      "ground_truth": "FAKE",
+      "predicted_verdict": "FAKE",
+      "confidence": 72.0,
+      "credibility_score": 20,
+      "rule_flags": 1
+    },
+    {
+      "id": 33,
+      "headline": "Classified Pentagon Document Proves Dinosaurs Live in Hidden Subterranean Tunnels Beneath Antarctica!",
+      "domain": "Sensationalism",
+      "ground_truth": "FAKE",
+      "predicted_verdict": "FAKE",
+      "confidence": 87.5,
+      "credibility_score": 5,
+      "rule_flags": 1
+    },
+    {
+      "id": 34,
+      "headline": "ELECTION ALERT: 10 Million Fake Ballots Found Floating in Florida River in Marked Boxes!",
+      "domain": "Politics",
+      "ground_truth": "FAKE",
+      "predicted_verdict": "FAKE",
+      "confidence": 73.6,
+      "credibility_score": 6,
+      "rule_flags": 2
+    },
+    {
+      "id": 35,
+      "headline": "5G Towers Secretly Emitting Frequencies to Erase Memories of Anyone Who Questions the Government!",
+      "domain": "Conspiracy",
+      "ground_truth": "FAKE",
+      "predicted_verdict": "FAKE",
+      "confidence": 76.1,
+      "credibility_score": 16,
+      "rule_flags": 1
+    },
+    {
+      "id": 36,
+      "headline": "Miracle Apple Vinegar Paste Dissolves Dental Cavities Overnight Dentists Demand Ban!",
+      "domain": "Health",
+      "ground_truth": "FAKE",
+      "predicted_verdict": "FAKE",
+      "confidence": 67.2,
+      "credibility_score": 25,
+      "rule_flags": 1
+    },
+    {
+      "id": 37,
+      "headline": "BREAKING: Artificial Clouds Over Major Cities Sprayed with Mind-Altering Chemicals to Induce Compliance!",
+      "domain": "Conspiracy",
+      "ground_truth": "FAKE",
+      "predicted_verdict": "REAL",
+      "confidence": 74.4,
+      "credibility_score": 54,
+      "rule_flags": 2
+    },
+    {
+      "id": 38,
+      "headline": "Secret Royal Family Diary Proves Time Travel Machine Operating in Underground Vault!",
+      "domain": "Sensationalism",
+      "ground_truth": "FAKE",
+      "predicted_verdict": "FAKE",
+      "confidence": 76.4,
+      "credibility_score": 6,
+      "rule_flags": 2
+    },
+    {
+      "id": 39,
+      "headline": "Government Outlaws Gas Stoves and Wood Fireplaces by Midnight Tonight With Heavy Jail Penalties!",
+      "domain": "Disinformation",
+      "ground_truth": "FAKE",
+      "predicted_verdict": "UNCERTAIN",
+      "confidence": 52.3,
+      "credibility_score": 44,
+      "rule_flags": 1
+    },
+    {
+      "id": 40,
+      "headline": "Anonymous Insider Confirms Moon is Hollow Metal Station Inhabited by Billionaire Elite!",
+      "domain": "Conspiracy",
+      "ground_truth": "FAKE",
+      "predicted_verdict": "FAKE",
+      "confidence": 79.5,
+      "credibility_score": 12,
+      "rule_flags": 1
+    },
+    {
+      "id": 41,
+      "headline": "Drinking Crushed Charcoal Completely Cures Heart Disease in 48 Hours Says Anonymous Herbalist!",
+      "domain": "Health",
+      "ground_truth": "FAKE",
+      "predicted_verdict": "FAKE",
+      "confidence": 78.2,
+      "credibility_score": 14,
+      "rule_flags": 1
+    },
+    {
+      "id": 42,
+      "headline": "URGENT WARNING: Smart Meters are Transmitting Secret Microwave Weapons into Civilian Bedrooms!",
+      "domain": "Conspiracy",
+      "ground_truth": "FAKE",
+      "predicted_verdict": "FAKE",
+      "confidence": 79.1,
+      "credibility_score": 0,
+      "rule_flags": 3
+    },
+    {
+      "id": 43,
+      "headline": "Leaked Audio Proves Tech CEOs Laughing About Subliminal Hypnosis Code in Smartphone Keyboards!",
+      "domain": "Sensationalism",
+      "ground_truth": "FAKE",
+      "predicted_verdict": "FAKE",
+      "confidence": 80.6,
+      "credibility_score": 0,
+      "rule_flags": 2
+    },
+    {
+      "id": 44,
+      "headline": "Military Deploys Weather Machine to Intentionally Steer Hurricanes Toward Conservative Towns!",
+      "domain": "Politics",
+      "ground_truth": "FAKE",
+      "predicted_verdict": "REAL",
+      "confidence": 77.3,
+      "credibility_score": 69,
+      "rule_flags": 1
+    },
+    {
+      "id": 45,
+      "headline": "Doctors Bribed with Millions to Conceal That Bananas Contain 100% Cancer Antidote!",
+      "domain": "Health",
+      "ground_truth": "FAKE",
+      "predicted_verdict": "FAKE",
+      "confidence": 73.5,
+      "credibility_score": 19,
+      "rule_flags": 1
+    },
+    {
+      "id": 46,
+      "headline": "Secret Submarine Fleet Encircles Secret Island Where World Leaders Practice Forbidden Rituals!",
+      "domain": "Sensationalism",
+      "ground_truth": "FAKE",
+      "predicted_verdict": "FAKE",
+      "confidence": 61.2,
+      "credibility_score": 1,
+      "rule_flags": 2
+    },
+    {
+      "id": 47,
+      "headline": "New Currency Bill Has Secret Microchip Designed to Detonate if You Criticize Politics!",
+      "domain": "Conspiracy",
+      "ground_truth": "FAKE",
+      "predicted_verdict": "FAKE",
+      "confidence": 73.4,
+      "credibility_score": 9,
+      "rule_flags": 2
+    },
+    {
+      "id": 48,
+      "headline": "Scientists Fire High-Energy Laser at Clouds to Block God's Sunlight from Honest Farmers!",
+      "domain": "Sensationalism",
+      "ground_truth": "FAKE",
+      "predicted_verdict": "REAL",
+      "confidence": 70.6,
+      "credibility_score": 63,
+      "rule_flags": 1
+    },
+    {
+      "id": 49,
+      "headline": "SHOCKING TRUTH: Tap Water Infused with Nanobots That Spy on Your Thoughts!",
+      "domain": "Conspiracy",
+      "ground_truth": "FAKE",
+      "predicted_verdict": "FAKE",
+      "confidence": 71.5,
+      "credibility_score": 0,
+      "rule_flags": 3
+    },
+    {
+      "id": 50,
+      "headline": "Whistleblower Leaks Forbidden Map Showing Two New Secret Continents Hidden by World Mapmakers!",
+      "domain": "Sensationalism",
+      "ground_truth": "FAKE",
+      "predicted_verdict": "FAKE",
+      "confidence": 74.8,
+      "credibility_score": 0,
+      "rule_flags": 2
+    }
+  ]
+}

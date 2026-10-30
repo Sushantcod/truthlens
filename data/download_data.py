@@ -2,10 +2,10 @@
 
 This script manages data acquisition for model training. If raw ISOT / LIAR
 datasets are absent, it automatically synthesizes a balanced, high-quality,
-diverse training dataset of 1,200+ realistic news articles (with both real
-wire-style reports and disinformation narratives across politics, health,
-climate, international affairs, and science) and 50 out-of-domain benchmark
-headlines to evaluate zero-shot generalization.
+diverse training dataset of 2,400+ realistic news articles and standalone headlines
+(covering verified journalism across politics, science, health, climate, law,
+and economics alongside disinformation narratives, hoaxes, and conspiracy tropes)
+and 50 out-of-domain benchmark headlines for generalization benchmarking.
 """
 
 import json
@@ -31,55 +31,85 @@ SAMPLE_DIR.mkdir(parents=True, exist_ok=True)
 REAL_TEMPLATES = [
     (
         "Global Climate Summit Concludes with Binding Emissions Accord",
-        "Delegates from over 190 nations reached a landmark agreement on Friday to reduce methane emissions by 30 percent before 2030. The accord, signed after two weeks of exhaustive deliberations in Geneva, introduces mandatory verification mechanisms and financing commitments for emerging economies transitioning to renewable energy grids. Environmental ministers commended the multilateral consensus, citing independent assessments by the Intergovernmental Panel on Climate Change (IPCC) validating the mitigation framework.",
+        "Delegates from over 190 nations reached a landmark agreement on Friday in Geneva to reduce methane emissions by 30 percent before 2030. The accord introduces mandatory verification mechanisms and financing commitments for emerging economies transitioning to renewable energy grids. Environmental ministers commended the multilateral consensus, citing independent assessments by the Intergovernmental Panel on Climate Change (IPCC) validating the mitigation framework.",
         "world_news",
     ),
     (
         "Central Bank Keeps Benchmark Interest Rates Steady Amid Cooling Inflation",
-        "The Federal Reserve announced on Wednesday that its benchmark policy interest rate will remain unchanged in the current 5.25 to 5.50 percent range. In the official policy statement, officials noted sustained progress toward the two percent long-term inflation objective, accompanied by robust employment numbers and steady GDP growth. Market indices closed moderately higher following chairman remarks confirming data-dependent monetary adjustments.",
+        "The Federal Reserve announced on Wednesday that its benchmark policy interest rate will remain unchanged in the 5.25 to 5.50 percent range. In the official policy statement, officials noted sustained progress toward the two percent long-term inflation objective, accompanied by robust employment numbers and steady GDP growth.",
         "economy",
     ),
     (
         "Clinical Trial Demonstrates 85 Percent Efficacy for Next-Generation Malaria Vaccine",
-        "A multi-center Phase III clinical trial published in the New England Journal of Medicine has confirmed that a novel recombinant malaria vaccine achieved 85 percent efficacy against symptomatic disease in children across sub-Saharan Africa. The randomized trial, overseen by international researchers and pediatric specialists, tracked over 4,800 participants over twelve months with negligible adverse events.",
+        "A multi-center Phase III clinical trial published in the New England Journal of Medicine has confirmed that a novel recombinant malaria vaccine achieved 85 percent efficacy against symptomatic disease in children across sub-Saharan Africa. The randomized trial, overseen by international researchers, tracked over 4,800 participants over twelve months with negligible adverse events.",
         "health",
     ),
     (
-        "Bipartisan Infrastructure Committee Approves High-Speed Rail Corridor Plan",
-        "Congressional leaders on Tuesday finalized authorization for a federal-state capital partnership allocating 12 billion dollars to develop high-speed rail links connecting major regional metropolitan transit hubs. The bipartisan legislation emphasizes domestic manufacturing standards and establishes independent safety audits under the Federal Railroad Administration.",
-        "politics",
+        "World Health Organization Issues Updated Global Dietary Guidelines on Sodium Reduction Targets",
+        "The World Health Organization published a comprehensive public health directive recommending that member states implement standardized sodium reduction targets across processed food manufacturing to mitigate hypertension and cardiovascular risks worldwide.",
+        "health",
     ),
     (
-        "Astronomers Detect Water Vapor Signatures on Habitable-Zone Exoplanet",
-        "Utilizing spectroscopic data from the James Webb Space Telescope, an international astronomical collaboration confirmed the presence of atmospheric water vapor and carbon dioxide on exoplanet K2-18b. The peer-reviewed research, published in Astrophysical Journal Letters, models atmospheric composition while cautioning that atmospheric chemistry requires further observational validation before assessing habitability.",
+        "FDA Grants Accelerated Approval to Breakthrough Targeted Immunotherapy for Lung Cancer",
+        "The Food and Drug Administration on Thursday granted accelerated approval to a novel monoclonal antibody therapy for patients diagnosed with refractory non-small cell lung cancer, citing peer-reviewed clinical trial response rates exceeding 65 percent.",
+        "health",
+    ),
+    (
+        "European Space Agency Launches Euclid Space Observatory to Map Dark Matter",
+        "The European Space Agency successfully deployed its Euclid space telescope aboard a heavy-lift rocket, initiating a six-year survey mission to construct a three-dimensional cosmic map and study the expansion rate of the universe.",
         "science",
     ),
     (
-        "Supreme Court Issues Unanimous Ruling on Digital Privacy and Cloud Storage",
-        "In a unanimous 9-0 opinion authored by the Chief Justice, the Supreme Court ruled Thursday that law enforcement authorities must obtain a judicial search warrant supported by probable cause prior to accessing cloud-stored personal backups and digital communication archives. Civil liberties organizations and legal scholars described the precedent as a vital affirmation of Fourth Amendment protections in the algorithmic era.",
+        "Marine Biologists Discover Resilient Coral Sanctuary Thriving in High Temperatures",
+        "Oceanographic researchers from an international marine institute confirmed the discovery of an extensive coral reef system in the southern Pacific exhibiting unexpected thermal resilience, providing vital genetic insights for oceanic conservation.",
+        "science",
+    ),
+    (
+        "Bipartisan Infrastructure Committee Approves High-Speed Rail Corridor Plan",
+        "Congressional leaders on Tuesday finalized authorization for a federal-state capital partnership allocating 12 billion dollars to develop high-speed rail links connecting major regional metropolitan transit hubs.",
+        "politics",
+    ),
+    (
+        "Supreme Court Agrees to Review Interstate Water Rights Compact and Digital Privacy",
+        "The Supreme Court agreed to hear oral arguments in an interstate dispute concerning equitable river water allocations, while simultaneously issuing a ruling requiring warrants for digital cloud storage searches.",
         "legal",
     ),
     (
-        "Renewable Energy Supplies Record 42 Percent of European Electricity in Annual Review",
-        "Official statistics released by the European Energy Agency confirm that wind, solar, and hydroelectric generation collectively supplied 42.4 percent of gross electricity consumption over the past calendar year, surpassing fossil fuel generation for the second consecutive annual audit. The report highlights grid modernization investments and battery storage additions as decisive contributing factors.",
-        "energy",
+        "Treasury Department Issues Compliance Guidelines for Cross-Border Digital Payments",
+        "Financial regulatory authorities issued an updated supervisory circular establishing anti-money laundering reporting standards for institutions facilitating cross-border digital and electronic remittance transactions.",
+        "economy",
     ),
     (
-        "Agricultural Researchers Pioneer Drought-Resilient Wheat Strain to Safeguard Food Security",
-        "Botanists and crop geneticists at the International Maize and Wheat Improvement Center announced the open-source release of three drought-tolerant wheat varieties developed through precision breeding. Extensive multi-season field trials demonstrated a 24 percent yield advantage under severe moisture deficit conditions without requiring synthetic gene modification.",
-        "agriculture",
+        "Global Semiconductor Alliance Pledges Investment in Domestic Fabrication Facilities",
+        "A consortium of leading microelectronics manufacturers committed 40 billion dollars toward constructing advanced semiconductor fabrication plants, strengthening domestic supply chain resilience against geopolitical disruptions.",
+        "technology",
+    ),
+    (
+        "National Weather Service Upgrades Coastal Radar Telemetry Infrastructure",
+        "Meteorologists announced the operational deployment of dual-polarization radar upgrades along coastal storm tracking corridors, improving hurricane landfall lead-time predictions by an average of six hours.",
+        "science",
+    ),
+    (
+        "United Nations Humanitarian Convoy Delivers Medical Supplies to Relief Corridors",
+        "United Nations logistics agencies coordinated the successful arrival of forty cargo trucks delivering insulin, vaccines, and surgical supplies to civilian relief centers following international diplomatic negotiations.",
+        "world_news",
+    ),
+    (
+        "Archaeological Expedition Unearths 3,000-Year-Old Administrative Complex in Mediterranean",
+        "Historians and field archaeologists reported the excavation of well-preserved limestone inscriptions and ceramic artifacts dating to the late Bronze Age, shedding new light on ancient maritime trading routes.",
+        "history",
     ),
 ]
 
 FAKE_TEMPLATES = [
     (
-        "BREAKING: Secret Classified Memo Proves Global Elites Staged the Lunar Landings in Utah",
-        "SHOCKING TRUTH EXPOSED! A leaked underground Pentagon whistle-blower document confirms what independent investigators knew all along: NASA staged every lunar landing inside an abandoned salt flat in Utah! Corrupt mainstream media and government insiders are desperately trying to bury this bombshell revelation before the public wakes up! SHARE THIS NOW BEFORE THEY DELETE IT FROM THE INTERNET!",
+        "BREAKING: Secret Classified Memo Proves Global Elites Staged Lunar Landings in Utah",
+        "SHOCKING TRUTH EXPOSED! A leaked underground Pentagon whistle-blower document confirms what independent researchers knew all along: NASA staged every lunar landing inside an abandoned salt flat in Utah! Corrupt mainstream media and government insiders are desperately trying to bury this bombshell revelation before the public wakes up! SHARE THIS NOW BEFORE THEY DELETE IT FROM THE INTERNET!",
         "conspiracy",
     ),
     (
         "Miracle Lemon and Baking Soda Mixture Cures All Stage 4 Cancers Overnight, Doctors Warned to Stay Silent",
-        "Big Pharma does not want you to discover this ancient home remedy! Drinking boiled lemon juice infused with industrial baking soda destroys 100% of cancer cells within 24 hours without chemotherapy. Corrupt medical boards are threatening any honest doctor who prescribes this 50-cent cure. Click here for the forbidden recipe that the medical cartel is hiding from your family!",
+        "Big Pharma does not want you to discover this ancient home remedy! Drinking boiled lemon juice infused with industrial baking soda destroys 100% of cancer cells within 24 hours without chemotherapy. Corrupt medical cartels are threatening any honest doctor who prescribes this 50-cent cure. Click here for the forbidden recipe that the medical cartel is hiding from your family!",
         "health_rumor",
     ),
     (
@@ -103,49 +133,65 @@ FAKE_TEMPLATES = [
         "health_rumor",
     ),
     (
-        "Secret Deep-Sea Creature Attacks Nuclear Submarine, Government Enforces Media Blackout",
-        "TERRIFYING: A classified naval transmission reveals that a gargantuan 300-foot prehistoric predator attacked an attack submarine in the Mariana Trench. Military command immediately threatened crew members with court martial if they speak out to the public. Photos leaked by an anonymous sailor inside!",
+        "Bill Gates Admits Putting Microchips in Municipal Drinking Water to Control Civilian Heartbeats",
+        "TERRIFYING CONFESSION: Leaked hidden camera footage shows tech billionaires bragging about putting self-assembling nanobots into public tap water to track civilian movements and alter DNA! The fake news media refuses to cover this existential emergency!",
+        "conspiracy",
+    ),
+    (
+        "Secret NASA Whistleblower Confirms Earth is Enclosed by an Ancient Glass Dome",
+        "THEY CANNOT HIDE IT ANYMORE! Top space agency insiders have officially confessed that the planet is surrounded by an impenetrable crystalline canopy and that all space exploration videos were rendered on Hollywood soundstages! WAKE UP BEFORE THE TRUTH IS CENSORED!",
         "sensationalism",
     ),
     (
-        "Government Plans to Ban Paper Cash and Meat Consumption by the End of This Year",
-        "You won't believe what corrupt bureaucrats are plotting behind closed doors! An undercover recording proves secret legislation will outlaw cash transactions and ban cattle farming by December. Everything will be replaced with synthetic bug protein rations and digital surveillance tokens!",
-        "disinformation",
+        "Drinking Boiled Garlic and Bleach Kills Every Virus in 10 Minutes, Doctors Beg You Not to Read",
+        "Doctors are outraged that this forbidden cure has leaked online! Mixing crushed garlic with concentrated household bleach eliminates every pathogen instantly. Hospital administrators are threatening to sue anyone who shares this post!",
+        "health_rumor",
+    ),
+    (
+        "Secret Pentagon Document Proves Dinosaurs Live in Hidden Subterranean Tunnels Beneath Antarctica",
+        "UNBELIEVABLE MILITARY DISCLOSURE: Special forces teams operating near the South Pole entered cavernous warm zones populated by prehistoric creatures. High command issued immediate gag orders to prevent public panic! See the shocking photographs inside!",
+        "sensationalism",
     ),
 ]
 
 VARIATION_PHRASES_REAL = [
-    "According to verified government transcripts and agency briefings,",
-    "In a detailed press release issued this morning,",
-    "Independent auditing firms corroborated the data through empirical evaluation,",
-    "Official documentation published in the peer-reviewed register confirmed that",
-    "Representatives from both international regulatory bodies emphasized that",
-    "During an on-the-record press conference broadcast live from Brussels,",
+    "According to verified institutional documentation and official press briefings,",
+    "In a formal communiqué released by international regulatory agencies,",
+    "Independent researchers confirmed through peer-reviewed empirical evaluation that",
+    "Official statements published in the federal register verified that",
+    "Government spokespersons and technical specialists emphasized that",
+    "During an on-the-record briefing broadcast live from headquarters,",
 ]
 
 VARIATION_PHRASES_FAKE = [
     "THE MAINSTREAM MEDIA IS DESPERATELY HIDING THIS SHOCKING SCANDAL!",
     "ANONYMOUS MILITARY INSIDERS HAVE RISKED THEIR LIVES TO LEAK THIS BOMBSHELL!",
     "WHAT THEY ARE NOT TELLING YOU WILL SEND CHILLS DOWN YOUR SPINE!",
-    "DO NOT TRUST THE ESTABLISHMENT: SHARE THIS BEFORE IT GETS CENSORED!",
+    "DO NOT TRUST THE CORRUPT ESTABLISHMENT: SHARE THIS BEFORE IT GETS DELETED!",
     "PATRIOTS MUST UNITE AND SPREAD THIS UNFILTERED TRUTH TO EVERYONE!",
-    "BOMBSHELL REPORT THAT PROVES EVERYTHING YOU WERE TOLD IS A TOTAL LIE!",
+    "BOMBSHELL EVIDENCE THAT PROVES EVERYTHING THE GOVERNMENT SAYS IS A TOTAL LIE!",
 ]
 
 
-def generate_synthetic_dataset(num_samples: int = 1400) -> pd.DataFrame:
-    """Generate a balanced, structured dataset of verified real and fake news articles."""
+def generate_synthetic_dataset(num_samples: int = 2400) -> pd.DataFrame:
+    """Generate a balanced, structured dataset of verified real and fake news articles and headlines."""
     logger.info("Generating %d synthetic/curated news samples for training...", num_samples)
     records = []
     half = num_samples // 2
 
-    # Generate Real samples
+    # Generate Real samples (mix of full articles and headline statements)
     for i in range(half):
         title_base, text_base, category = random.choice(REAL_TEMPLATES)
-        prefix = random.choice(VARIATION_PHRASES_REAL)
-        # Add realistic variability
-        text = f"{prefix} {text_base} Further corroborating statements confirmed that systematic peer review and institutional protocols were strictly maintained throughout the process."
-        title = f"{title_base} (Report #{i+1})"
+        if random.random() < 0.35:
+            # Standalone headline / short news wire statement
+            text = f"{title_base}. {text_base[:120]}."
+            title = title_base
+        else:
+            # Full article with variation prefix and institutional conclusion
+            prefix = random.choice(VARIATION_PHRASES_REAL)
+            text = f"{title_base}. {prefix} {text_base} Further corroborating statements confirmed that systematic peer review and institutional protocols were strictly maintained throughout the process."
+            title = f"{title_base} (Report #{i+1})"
+
         records.append({
             "title": title,
             "text": text,
@@ -154,12 +200,18 @@ def generate_synthetic_dataset(num_samples: int = 1400) -> pd.DataFrame:
             "label_name": "REAL"
         })
 
-    # Generate Fake samples
+    # Generate Fake samples (mix of sensational headlines and viral articles)
     for i in range(half):
         title_base, text_base, category = random.choice(FAKE_TEMPLATES)
-        prefix = random.choice(VARIATION_PHRASES_FAKE)
-        text = f"{prefix} {text_base} Share this urgent bulletin immediately with everyone you know before big tech algorithms delete it forever!"
-        title = f"{title_base} !!! [URGENT #{i+1}]"
+        if random.random() < 0.35:
+            # Standalone sensational headline
+            text = f"{title_base}! {text_base[:100]}!"
+            title = title_base
+        else:
+            prefix = random.choice(VARIATION_PHRASES_FAKE)
+            text = f"{title_base}! {prefix} {text_base} Share this urgent bulletin immediately with everyone you know before big tech algorithms delete it forever!"
+            title = f"{title_base} !!! [URGENT #{i+1}]"
+
         records.append({
             "title": title,
             "text": text,
@@ -252,7 +304,7 @@ def prepare_datasets():
         df = pd.concat([df_true, df_fake], ignore_index=True)
     else:
         logger.info("Raw Kaggle ISOT files not present. Generating balanced curated news corpus...")
-        df = generate_synthetic_dataset(num_samples=1600)
+        df = generate_synthetic_dataset(num_samples=2400)
 
     # Save processed training dataset
     df.to_csv(processed_path, index=False)
@@ -267,4 +319,3 @@ def prepare_datasets():
 
 if __name__ == "__main__":
     prepare_datasets()
-
