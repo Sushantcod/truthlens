@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+
+{% block title %}Verify News & Claims – TruthLens{% endblock %}
+
+{% block content %}
+<div style="max-width: 820px; margin: 20px auto;">
+  <div style="margin-bottom: 24px;">
+    <p class="eyebrow">// MULTI-MODAL MISINFORMATION AUDITOR</p>
+    <h1>Audit Article Credibility<span>.</span></h1>
+    <p class="lead-text">
+      Select your preferred input ingestion mode: directly paste statement text, provide a live news URL to scrape, or upload a raw text transcript.
+    </p>
+  </div>
+
+  <div class="card-box" style="padding: 32px;">
+    <form method="POST" enctype="multipart/form-data" id="audit-form">
+      {{ form.hidden_tag() }}
+
+      <!-- Mode Selector -->
+      <div style="margin-bottom: 24px;">
+        <label class="form-label">CHOOSE INPUT METHOD</label>
+        <div class="mode-switch" role="radiogroup">
+          {% for subfield in form.input_mode %}
+            <label class="mode-button" style="cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
+              {{ subfield(style="display:none;") }}
+              <span>{{ subfield.label.text }}</span>
+            </label>
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- Quick Fill Sample Prompts for Instant Testing -->
+      <div style="margin-bottom: 20px; display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
+        <span class="eyebrow" style="margin-bottom: 0;">LOAD TEST SAMPLES:</span>
+        <button type="button" class="btn btn-sm" onclick="loadSample('fake')">Fake Disinformation Sample</button>
+        <button type="button" class="btn btn-sm" onclick="loadSample('real')">Verified Science Report</button>
+        <button type="button" class="btn btn-sm" onclick="loadSample('neutral')">Ambiguous / Uncertain Sample</button>
+      </div>
+
+      <!-- Title / Headline -->
+      <div style="margin-bottom: 20px;">
+        <label class="form-label" for="{{ form.title.id }}">{{ form.title.label }}</label>
+        {{ form.title(class="form-control", id="claim-title") }}
+      </div>
+
+      <!-- Mode 1: Paste Text -->
+      <div id="input-group-text" style="margin-bottom: 24px;">
+        <label class="form-label" for="{{ form.article_text.id }}">{{ form.article_text.label }}</label>
+        {{ form.article_text(class="form-control", id="claim-text", style="min-height: 160px; font-size: 15px;") }}
+      </div>
+
+      <!-- Mode 2: Article URL -->
+      <div id="input-group-url" style="margin-bottom: 24px; display: none;">
+        <label class="form-label" for="{{ form.article_url.id }}">{{ form.article_url.label }}</label>
+        {{ form.article_url(class="form-control", placeholder="https://www.reuters.com/world/...") }}
+        <p style="color: var(--muted); font-size: 11px; margin-top: 6px; font-family: 'DM Mono', monospace;">
+          Our backend scraper will automatically extract the headline, canonical body paragraphs, and source domain.
+        </p>
+      </div>
+
+      <!-- Mode 3: Upload Text File -->
+      <div id="input-group-file" style="margin-bottom: 24px; display: none;">
+        <label class="form-label" for="{{ form.article_file.id }}">{{ form.article_file.label }}</label>
+        {{ form.article_file(class="form-control") }}
+        <p style="color: var(--muted); font-size: 11px; margin-top: 6px; font-family: 'DM Mono', monospace;">
+          Upload a UTF-8 encoded plain text (.txt) file up to 4MB in size.
+        </p>
+      </div>
+
+      <!-- Submit Action -->
+      <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 16px; border-top: 1px solid var(--line);">
+        <span style="font-family: 'DM Mono', monospace; font-size: 10px; color: var(--muted); letter-spacing: 0.8px;">
+          MODEL: SOFT-VOTING META-ENSEMBLE (LR + MNB + CALIBRATED SVM)
+        </span>
+        <button type="submit" id="submit-btn" class="btn btn-primary" style="min-height: 44px; padding: 0 24px;">
+          Execute Verification Audit →
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+function loadSample(type) {
+  // Ensure text mode radio is selected
+  const textRadio = document.querySelector("input[name='input_mode'][value='text']");
+  if (textRadio) {
+    textRadio.checked = true;
+    textRadio.dispatchEvent(new Event('change'));
+  }
+
+  const titleInput = document.getElementById("claim-title");
+  const textInput = document.getElementById("claim-text");
+
+  if (type === 'fake') {
+    titleInput.value = "SHOCKING BOMBSHELL: Underground Salt Flats Staged Moon Landings!";
+    textInput.value = "SHOCKING TRUTH EXPOSED! A leaked underground Pentagon whistle-blower document confirms what independent researchers knew all along: NASA staged every single lunar landing inside an abandoned salt flat in Utah! Corrupt mainstream media and global elites are desperately trying to bury this bombshell revelation before the public wakes up! SHARE THIS NOW BEFORE THEY DELETE IT FROM THE INTERNET!";
+  } else if (type === 'real') {
+    titleInput.value = "Global Climate Summit Concludes with Binding Emissions Accord";
+    textInput.value = "Delegates from over 190 nations reached a landmark agreement on Friday to reduce methane emissions by 30 percent before 2030. The accord, signed after two weeks of exhaustive deliberations in Geneva, introduces mandatory verification mechanisms and financing commitments for emerging economies transitioning to renewable energy grids. Environmental ministers commended the multilateral consensus, citing independent assessments by the Intergovernmental Panel on Climate Change (IPCC) validating the mitigation framework.";
+  } else if (type === 'neutral') {
+    titleInput.value = "Municipal Council Announces Annual City Park Maintenance Timetable";
+    textInput.value = "The regional district council held its monthly public assembly on Tuesday morning to discuss upcoming tree trimming schedules, community center reservations, and resurfacing contracts for local bicycle pathways. Residents are encouraged to review the draft timetable online.";
+  }
+}
+
+// Active styling on radio buttons
+document.querySelectorAll(".mode-switch label").forEach(label => {
+  const radio = label.querySelector("input");
+  function sync() {
+    document.querySelectorAll(".mode-switch label").forEach(l => l.classList.remove("active"));
+    if (radio.checked) label.classList.add("active");
+  }
+  radio.addEventListener("change", sync);
+  if (radio.checked) label.classList.add("active");
+});
+</script>
+{% endblock %}
+

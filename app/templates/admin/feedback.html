@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block title %}Feedback Review Queue – Admin Studio{% endblock %}
+
+{% block content %}
+<div style="max-width: 1040px; margin: 10px auto;">
+  <div style="display: flex; justify-content: space-between; align-items: end; margin-bottom: 24px; flex-wrap: wrap; gap: 14px;">
+    <div>
+      <p class="eyebrow" style="color: var(--coral);">// ACTIVE LEARNING SUPERVISION</p>
+      <h1>Feedback Verification Queue<span>.</span></h1>
+    </div>
+
+    <!-- Status Tabs -->
+    <div class="mode-switch">
+      <a class="mode-button {% if active_status == 'pending' %}active{% endif %}" href="{{ url_for('admin.feedback_queue', status='pending') }}">Pending Review</a>
+      <a class="mode-button {% if active_status == 'approved' %}active{% endif %}" href="{{ url_for('admin.feedback_queue', status='approved') }}">Approved for Training</a>
+      <a class="mode-button {% if active_status == 'rejected' %}active{% endif %}" href="{{ url_for('admin.feedback_queue', status='rejected') }}">Rejected</a>
+    </div>
+  </div>
+
+  <div class="card-box" style="padding: 0; overflow: hidden;">
+    {% if feedbacks and feedbacks|length > 0 %}
+      <table class="custom-table" style="margin: 0;">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Original Claim & Predicted Verdict</th>
+            <th>Citizen Assertion</th>
+            <th>Evidence / Comments</th>
+            <th style="text-align: right;">Review Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for fb in feedbacks %}
+            <tr>
+              <td style="font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted); white-space: nowrap;">
+                {{ fb.created_at.strftime('%Y-%m-%d %H:%M') }}
+              </td>
+              <td style="max-width: 320px;">
+                <div style="font-weight: 600;">
+                  <a href="{{ url_for('main.result', check_id=fb.check_id) }}" style="color: var(--ink); text-decoration: none;">
+                    {{ fb.check_record.title[:60] }}...
+                  </a>
+                </div>
+                <div style="font-family: 'DM Mono', monospace; font-size: 10px; color: var(--muted); margin-top: 2px;">
+                  Model predicted: <strong>{{ fb.check_record.verdict }}</strong> ({{ fb.check_record.confidence }}%)
+                </div>
+              </td>
+              <td>
+                {% if fb.user_verdict == 'REAL' %}
+                  <span class="badge-tag badge-real">USER: REAL</span>
+                {% else %}
+                  <span class="badge-tag badge-fake">USER: FAKE</span>
+                {% endif %}
+              </td>
+              <td style="font-size: 12px; color: var(--muted); max-width: 250px;">
+                {{ fb.comment or "No explanation provided" }}
+              </td>
+              <td style="text-align: right; white-space: nowrap;">
+                {% if fb.status == 'pending' %}
+                  <form method="POST" action="{{ url_for('admin.handle_feedback', fb_id=fb.id, action='approve') }}" style="display: inline-block;">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <button type="submit" class="btn btn-sm btn-teal">Approve ✓</button>
+                  </form>
+                  <form method="POST" action="{{ url_for('admin.handle_feedback', fb_id=fb.id, action='reject') }}" style="display: inline-block; margin-left: 4px;">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <button type="submit" class="btn btn-sm btn-coral">Reject ✕</button>
+                  </form>
+                {% else %}
+                  <span style="font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 600; text-transform: uppercase;">{{ fb.status }}</span>
+                {% endif %}
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <div style="padding: 40px; text-align: center; color: var(--muted); font-size: 14px;">
+        No feedback records in the <strong>{{ active_status }}</strong> queue.
+      </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
+

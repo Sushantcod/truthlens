@@ -1,0 +1,26 @@
+# Python & Virtualenv
+venv/
+*.pyc
+__pycache__/
+*.pyo
+*.pyd
+.Python
+
+# SQLite Databases & Local State
+*.db
+truthlens.db
+test.db
+instance/
+
+# Local Environment Variables
+.env
+!.env.example
+
+# Testing & Coverage
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Operating System
+.DS_Store
+Thumbs.db

@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}500 – Internal System Error{% endblock %}
+
+{% block content %}
+<div style="max-width: 500px; margin: 60px auto; text-align: center;">
+  <p class="eyebrow" style="color: var(--coral);">// 500 INTERNAL ANOMALY</p>
+  <h1 style="font-size: 48px; margin-bottom: 12px;">System Anomaly<span>.</span></h1>
+  <p style="color: var(--muted); font-size: 14px; margin-bottom: 24px;">
+    An unexpected condition interrupted the verification pipeline. The incident has been recorded in the administrator audit log for diagnostic inspection.
+  </p>
+  <a href="{{ url_for('main.index') }}" class="btn btn-primary">Return to Safety (Home) →</a>
+</div>
+{% endblock %}
+

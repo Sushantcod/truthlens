@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+
+{% block title %}Developer REST API Specification – TruthLens{% endblock %}
+
+{% block content %}
+<div style="max-width: 960px; margin: 10px auto;">
+  <div style="margin-bottom: 32px;">
+    <p class="eyebrow">// DEVELOPER INTEGRATION & EMBEDDABLE AUDITORS</p>
+    <h1>REST API Specification<span>.</span></h1>
+    <p class="lead-text">
+      Integrate TruthLens credibility analysis directly into your browser extensions, news aggregation feeds, CMS plugins, or social media bots via programmatic REST endpoints.
+    </p>
+  </div>
+
+  <!-- Authentication Card -->
+  <div class="card-box" style="margin-bottom: 28px;">
+    <p class="eyebrow">API KEY AUTHENTICATION</p>
+    <h3 style="font-size: 20px; margin-bottom: 12px;">Authentication Headers</h3>
+    <p style="color: var(--muted); font-size: 13px; margin-bottom: 14px;">
+      Every request must supply an active developer token in either the <code>X-API-Key</code> or <code>Authorization: Bearer &lt;token&gt;</code> header. Obtain or regenerate your token in your <a href="{{ url_for('auth.profile') }}" style="color:var(--ink); text-decoration: underline;">User Profile</a>.
+    </p>
+
+    <pre style="background: var(--paper); border: 1px solid var(--line); border-radius: 3px; padding: 14px; font-family: 'DM Mono', monospace; font-size: 12px; overflow-x: auto; margin: 0;">
+curl -X POST "{{ request.host_url }}api/predict" \
+  -H "X-API-Key: YOUR_API_KEY_HERE" \
+  -H "Content-Type: application/json" \
+  -d '{"text": "SHOCKING BOMBSHELL: Secret cure discovered!"}'
+    </pre>
+  </div>
+
+  <!-- Endpoint 1: POST /api/predict -->
+  <div class="card-box" style="margin-bottom: 28px;">
+    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+      <span class="badge-tag" style="background: var(--teal); color: #fff;">POST</span>
+      <code style="font-family: 'DM Mono', monospace; font-size: 16px; font-weight: 600;">/api/predict</code>
+    </div>
+    <p style="color: var(--muted); font-size: 13px; margin-bottom: 16px;">
+      Evaluates the input text against the soft-voting ensemble and knowledge-based rules. Returns classification probabilities, credibility score (0-100), rule flags, and influential feature attributions.
+    </p>
+
+    <h4 style="font-size: 15px; margin-bottom: 8px;">Request Payload (JSON)</h4>
+    <pre style="background: var(--paper); border: 1px solid var(--line); border-radius: 3px; padding: 14px; font-family: 'DM Mono', monospace; font-size: 12px; overflow-x: auto; margin-bottom: 18px;">
+{
+  "text": "Delegates from over 190 nations reached a landmark emissions agreement.",
+  "title": "Global Climate Accord Finalized",
+  "domain": "un.org"
+}
+    </pre>
+
+    <h4 style="font-size: 15px; margin-bottom: 8px;">Response Payload (200 OK)</h4>
+    <pre style="background: var(--paper); border: 1px solid var(--line); border-radius: 3px; padding: 14px; font-family: 'DM Mono', monospace; font-size: 12px; overflow-x: auto; margin: 0;">
+{
+  "status": "success",
+  "data": {
+    "check_id": 42,
+    "verdict": "REAL",
+    "confidence": 92.4,
+    "credibility_score": 90,
+    "probabilities": {
+      "REAL": 0.924,
+      "FAKE": 0.076
+    },
+    "rule_flags": [
+      {
+        "rule": "VERIFIED_REPUTABLE_SOURCE",
+        "severity": "POSITIVE",
+        "score_impact": 15,
+        "description": "Domain 'un.org' recognized as an institutional news wire or verified publisher."
+      }
+    ],
+    "top_features": [
+      {
+        "feature": "agreement",
+        "weight": -0.842,
+        "signal": "REAL",
+        "direction": "Pushes toward REAL"
+      }
+    ],
+    "disclaimer": "TruthLens AI provides algorithmic credibility assistance to aid human critical reading..."
+  }
+}
+    </pre>
+  </div>
+
+  <!-- Endpoint 2: GET /api/history -->
+  <div class="card-box">
+    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+      <span class="badge-tag" style="background: var(--ink); color: #fff;">GET</span>
+      <code style="font-family: 'DM Mono', monospace; font-size: 16px; font-weight: 600;">/api/history</code>
+    </div>
+    <p style="color: var(--muted); font-size: 13px; margin-bottom: 16px;">
+      Retrieves paginated verification audit logs associated with your API credentials.
+    </p>
+
+    <h4 style="font-size: 15px; margin-bottom: 8px;">Query Parameters</h4>
+    <ul style="font-size: 13px; color: var(--muted); margin-bottom: 16px; padding-left: 20px;">
+      <li><code>page</code> (integer, optional, default: 1): Page number</li>
+      <li><code>per_page</code> (integer, optional, default: 10, max: 50): Number of records per page</li>
+    </ul>
+
+    <h4 style="font-size: 15px; margin-bottom: 8px;">Sample cURL Command</h4>
+    <pre style="background: var(--paper); border: 1px solid var(--line); border-radius: 3px; padding: 14px; font-family: 'DM Mono', monospace; font-size: 12px; overflow-x: auto; margin: 0;">
+curl -X GET "{{ request.host_url }}api/history?page=1&per_page=5" \
+  -H "X-API-Key: YOUR_API_KEY_HERE"
+    </pre>
+  </div>
+</div>
+{% endblock %}
+

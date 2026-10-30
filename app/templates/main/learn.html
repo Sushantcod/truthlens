@@ -1,0 +1,327 @@
+{% extends "base.html" %}
+
+{% block title %}Media Literacy Center – TruthLens{% endblock %}
+
+{% block content %}
+<div style="max-width: 960px; margin: 10px auto;">
+  <div style="margin-bottom: 32px;">
+    <p class="eyebrow">// CRITICAL INQUIRY & CIVIC EMPOWERMENT</p>
+    <h1>Media Literacy Center<span>.</span></h1>
+    <p class="lead-text">
+      Algorithmic tools alone cannot solve misinformation without human critical discernment. Learn proven verification frameworks, test your analytical skills with our 10-question quiz, and explore key disinformation terminology.
+    </p>
+  </div>
+
+  <!-- SIFT Framework Section -->
+  <div class="card-box" style="margin-bottom: 36px; padding: 32px;">
+    <p class="eyebrow">// THE 4-STEP SIFT VERIFICATION FRAMEWORK</p>
+    <h2 style="font-size: 26px; margin-bottom: 20px;">How Professional Fact-Checkers Read the Web</h2>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 18px;">
+      <div style="padding: 16px; border: 1px solid var(--line); border-radius: 3px; background: var(--paper);">
+        <div style="font-family: 'DM Mono', monospace; font-size: 22px; font-weight: 700; color: var(--coral); margin-bottom: 6px;">S // STOP</div>
+        <p style="font-size: 13px; color: var(--muted); margin: 0; line-height: 1.5;">
+          When an article triggers intense outrage, fear, or euphoria, pause before reacting or retweeting. Viral deception relies on emotional hijacking.
+        </p>
+      </div>
+
+      <div style="padding: 16px; border: 1px solid var(--line); border-radius: 3px; background: var(--paper);">
+        <div style="font-family: 'DM Mono', monospace; font-size: 22px; font-weight: 700; color: var(--teal); margin-bottom: 6px;">I // INVESTIGATE</div>
+        <p style="font-size: 13px; color: var(--muted); margin: 0; line-height: 1.5;">
+          Open a new tab to research the publisher and author. Are they a recognized institutional newsroom or an anonymous blog registered last week?
+        </p>
+      </div>
+
+      <div style="padding: 16px; border: 1px solid var(--line); border-radius: 3px; background: var(--paper);">
+        <div style="font-family: 'DM Mono', monospace; font-size: 22px; font-weight: 700; color: var(--yellow); margin-bottom: 6px;">F // FIND BETTER</div>
+        <p style="font-size: 13px; color: var(--muted); margin: 0; line-height: 1.5;">
+          Search if reputable wire services (AP, Reuters, BBC, The Hindu) have reported the same claim. Extraordinary claims must have multiple independent confirmations.
+        </p>
+      </div>
+
+      <div style="padding: 16px; border: 1px solid var(--line); border-radius: 3px; background: var(--paper);">
+        <div style="font-family: 'DM Mono', monospace; font-size: 22px; font-weight: 700; color: var(--ink); margin-bottom: 6px;">T // TRACE CONTEXT</div>
+        <p style="font-size: 13px; color: var(--muted); margin: 0; line-height: 1.5;">
+          Trace quotes and video clips back to the original source. Many viral hoaxes use real footage taken years earlier out of its original historical context.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Interactive 10-Question Media Literacy Quiz -->
+  <div class="card-box" style="margin-bottom: 36px; padding: 32px;" id="quiz-section">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; flex-wrap: wrap; gap: 12px;">
+      <div>
+        <p class="eyebrow" style="margin-bottom: 4px;">// KNOWLEDGE EVALUATION</p>
+        <h2 style="font-size: 26px; margin: 0;">Media Literacy Diagnostic Quiz</h2>
+      </div>
+      <div id="quiz-score-badge" style="display: none; font-family: 'DM Mono', monospace; font-size: 13px; font-weight: 700; padding: 6px 14px; border-radius: 3px;"></div>
+    </div>
+    <p style="color: var(--muted); font-size: 14px; margin-bottom: 24px;">
+      Answer the 10 real-world scenario questions below to assess your misinformation resistance quotient.
+    </p>
+
+    <form id="quiz-form">
+      <div id="quiz-questions-container" style="display: flex; flex-direction: column; gap: 24px;"></div>
+
+      <div style="margin-top: 28px; padding-top: 20px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center;">
+        <button type="button" class="btn btn-primary" onclick="gradeQuiz()" style="min-height: 44px; padding: 0 24px;">
+          Submit and Calculate My Score →
+        </button>
+        <button type="button" class="btn btn-sm" onclick="resetQuiz()">Reset Quiz</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Misinformation Glossary -->
+  <div class="card-box" style="padding: 32px;">
+    <p class="eyebrow">// CONCEPTUAL REFERENCE</p>
+    <h2 style="font-size: 26px; margin-bottom: 20px;">Disinformation & AI Glossary</h2>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
+      <div>
+        <h4 style="font-size: 16px; margin-bottom: 4px;">Astroturfing</h4>
+        <p style="color: var(--muted); font-size: 13px; line-height: 1.5; margin: 0;">
+          The deceptive practice of using bot networks or paid accounts to simulate grassroots civilian consensus around an artificial political narrative.
+        </p>
+      </div>
+
+      <div>
+        <h4 style="font-size: 16px; margin-bottom: 4px;">Deepfake & Cheapfake</h4>
+        <p style="color: var(--muted); font-size: 13px; line-height: 1.5; margin: 0;">
+          Deepfakes utilize generative neural networks (GANs/diffusion) to swap faces or synthesize voices; cheapfakes use simple speed adjustments or misleading cropping.
+        </p>
+      </div>
+
+      <div>
+        <h4 style="font-size: 16px; margin-bottom: 4px;">Malinformation</h4>
+        <p style="color: var(--muted); font-size: 13px; line-height: 1.5; margin: 0;">
+          Genuine, factually authentic information leaked or published out of context with malicious intent to cause psychological harm or reputational sabotage.
+        </p>
+      </div>
+
+      <div>
+        <h4 style="font-size: 16px; margin-bottom: 4px;">Echo Chamber & Epistemic Bubble</h4>
+        <p style="color: var(--muted); font-size: 13px; line-height: 1.5; margin: 0;">
+          Algorithmic social feedback loops where contradictory viewpoints are actively discredited or filtered out, cementing cognitive bias and ideological polarization.
+        </p>
+      </div>
+
+      <div>
+        <h4 style="font-size: 16px; margin-bottom: 4px;">Explainable AI (XAI)</h4>
+        <p style="color: var(--muted); font-size: 13px; line-height: 1.5; margin: 0;">
+          Techniques such as LIME and linear log-odds attribution that expose the inner mathematical weights of black-box classifiers to human verification.
+        </p>
+      </div>
+
+      <div>
+        <h4 style="font-size: 16px; margin-bottom: 4px;">Confidence Calibration</h4>
+        <p style="color: var(--muted); font-size: 13px; line-height: 1.5; margin: 0;">
+          Aligning predicted output probabilities with actual empirical accuracy, ensuring the model expresses doubt when linguistic signals are inconclusive.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const QUIZ_DATA = [
+  {
+    q: "1. A viral post shows a video of an overflowing hospital with the caption 'BREAKING: Secret virus outbreak today!'. What is the optimal first step?",
+    options: [
+      "Share it immediately to protect friends and family.",
+      "Check the video's reverse image / keyframe search and search wire reports.",
+      "Trust it because it has over 100,000 retweets.",
+      "Assume video footage can never be manipulated."
+    ],
+    correct: 1,
+    explanation: "Reverse-searching video keyframes often reveals the footage was recorded during a previous historic event in another country."
+  },
+  {
+    q: "2. What distinguishes 'Disinformation' from 'Misinformation'?",
+    options: [
+      "Disinformation is completely true while misinformation is false.",
+      "Misinformation is spread on television, disinformation on the internet.",
+      "Disinformation is deliberately fabricated to deceive, while misinformation is false information shared without harmful intent.",
+      "There is no conceptual difference."
+    ],
+    correct: 2,
+    explanation: "Intent is the defining criterion: disinformation is intentional deception, while misinformation is often shared mistakenly by well-meaning users."
+  },
+  {
+    q: "3. What is an editorial 'dateline' (e.g. 'WASHINGTON (Reuters) -') and why must ML models purge it during training?",
+    options: [
+      "It represents a copyright patent.",
+      "It causes data leakage where the classifier learns trivial word tags rather than semantic credibility markers.",
+      "It slows down internet transfer speeds.",
+      "It is illegal under digital copyright legislation."
+    ],
+    correct: 1,
+    explanation: "Dateline signatures cause catastrophic leakage: naive models memorize '(Reuters)' as 99% real and fail on unbranded texts."
+  },
+  {
+    q: "4. What does a 0-100 Credibility Score of 15 indicate in TruthLens?",
+    options: [
+      "The claim is verified by the government.",
+      "The claim possesses high disinformation markers, sensational lexical patterns, or unreliable domain flags.",
+      "The algorithm failed to execute.",
+      "The document is written in academic language."
+    ],
+    correct: 1,
+    explanation: "TruthLens Credibility Scores scale from 0 (fabricated/disinformation) to 100 (verified institutional credibility)."
+  },
+  {
+    q: "5. A sensational headline uses ALL CAPS and ends with 'THEY DON'T WANT YOU TO KNOW!'. What cognitive mechanism is being targeted?",
+    options: [
+      "Epistemic humility",
+      "Curiosity gap and emotional outrage to bypass analytical thinking",
+      "Formal deductive logic",
+      "Scientific peer review"
+    ],
+    correct: 1,
+    explanation: "Clickbait and conspiracy headlines weaponize the curiosity gap and tribal outrage to trigger impulsive viral sharing."
+  },
+  {
+    q: "6. Why does TruthLens return an 'UNCERTAIN' verdict for articles with confidence between 40% and 60%?",
+    options: [
+      "Because the server ran out of memory.",
+      "Responsible AI calibration: ambiguous texts should not be forced into false binary conclusions.",
+      "Because the article was written in Hindi.",
+      "To encourage the user to buy a subscription."
+    ],
+    correct: 1,
+    explanation: "Responsible AI mandates confidence calibration: acknowledging epistemic uncertainty when evidence is balanced or inconclusive."
+  },
+  {
+    q: "7. What is 'Lateral Reading'?",
+    options: [
+      "Reading a document from right to left.",
+      "Opening multiple browser tabs to cross-examine what outside independent sources say about a publisher.",
+      "Only reading the headline and the first sentence.",
+      "Skimming an article sideways on a mobile screen."
+    ],
+    correct: 1,
+    explanation: "Fact-checkers read laterally by opening tabs to investigate the author, funder, and external corroborations before reading the page itself."
+  },
+  {
+    q: "8. In Explainable AI (XAI), what do the highlighted coral and teal tokens communicate?",
+    options: [
+      "Spelling and grammatical mistakes in the text.",
+      "Word count milestones in the paragraph.",
+      "The directional log-odds attribution of specific words toward either a FAKE or REAL prediction.",
+      "Keywords sponsored by advertisers."
+    ],
+    correct: 2,
+    explanation: "Token salience highlights feature weights: coral tokens push toward misinformation, teal tokens push toward credibility."
+  },
+  {
+    q: "9. An anonymous health blog claims drinking boiled saltwater cures cancer in 3 days. What knowledge-base rule flag is triggered?",
+    options: [
+      "Peer-reviewed medical consensus.",
+      "Unverified anonymous assertion and sensational miracle cure lexicon.",
+      "Institutional wire service.",
+      "Public domain clearance."
+    ],
+    correct: 1,
+    explanation: "Medical disinformation frequently pairs anonymous attribution with extreme miracle assertions, triggering our rule heuristics."
+  },
+  {
+    q: "10. How does Human-in-the-Loop (HITL) learning improve TruthLens over time?",
+    options: [
+      "It deletes the machine learning models daily.",
+      "Crowdsourced user feedback is vetted by administrators and integrated into model retraining cycles.",
+      "It sends automated emails to news websites.",
+      "It automatically blocks users who disagree with the AI."
+    ],
+    correct: 1,
+    explanation: "Human feedback provides continuous active learning labels, allowing the model to adapt to emergent linguistic misinformation tropes."
+  }
+];
+
+function renderQuiz() {
+  const container = document.getElementById("quiz-questions-container");
+  container.innerHTML = "";
+
+  QUIZ_DATA.forEach((item, qIdx) => {
+    const qDiv = document.createElement("div");
+    qDiv.style.padding = "18px";
+    qDiv.style.border = "1px solid var(--line)";
+    qDiv.style.borderRadius = "3px";
+    qDiv.style.background = "var(--paper)";
+    qDiv.id = `quiz-q-${qIdx}`;
+
+    let optionsHtml = item.options.map((opt, oIdx) => `
+      <label style="display: flex; align-items: flex-start; gap: 8px; margin-bottom: 8px; font-size: 13px; cursor: pointer;">
+        <input type="radio" name="question_${qIdx}" value="${oIdx}" style="margin-top: 3px;">
+        <span>${opt}</span>
+      </label>
+    `).join("");
+
+    qDiv.innerHTML = `
+      <div style="font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600; margin-bottom: 12px; color: var(--ink);">
+        ${item.q}
+      </div>
+      <div style="margin-left: 4px;">
+        ${optionsHtml}
+      </div>
+      <div id="quiz-exp-${qIdx}" style="display: none; margin-top: 10px; padding: 10px; font-size: 12px; border-radius: 2px;"></div>
+    `;
+    container.appendChild(qDiv);
+  });
+}
+
+function gradeQuiz() {
+  let score = 0;
+  QUIZ_DATA.forEach((item, qIdx) => {
+    const selected = document.querySelector(`input[name="question_${qIdx}"]:checked`);
+    const expDiv = document.getElementById(`quiz-exp-${qIdx}`);
+    const qDiv = document.getElementById(`quiz-q-${qIdx}`);
+
+    expDiv.style.display = "block";
+
+    if (selected && parseInt(selected.value) === item.correct) {
+      score++;
+      qDiv.style.borderColor = "var(--teal)";
+      expDiv.style.background = "var(--teal-soft)";
+      expDiv.style.color = "var(--teal)";
+      expDiv.innerHTML = `<strong>✓ Correct!</strong> ${item.explanation}`;
+    } else {
+      qDiv.style.borderColor = "var(--coral)";
+      expDiv.style.background = "var(--coral-soft)";
+      expDiv.style.color = "var(--coral)";
+      expDiv.innerHTML = `<strong>✕ Incorrect.</strong> ${item.explanation}`;
+    }
+  });
+
+  const badge = document.getElementById("quiz-score-badge");
+  badge.style.display = "inline-block";
+  if (score >= 8) {
+    badge.style.background = "var(--teal-soft)";
+    badge.style.color = "var(--teal)";
+    badge.style.border = "1px solid var(--teal)";
+    badge.textContent = `SCORE: ${score} / 10 – EXPERT FACT-CHECKER RATING`;
+  } else if (score >= 5) {
+    badge.style.background = "var(--yellow-soft)";
+    badge.style.color = "#8c6d17";
+    badge.style.border = "1px solid var(--yellow)";
+    badge.textContent = `SCORE: ${score} / 10 – COMPETENT READER`;
+  } else {
+    badge.style.background = "var(--coral-soft)";
+    badge.style.color = "var(--coral)";
+    badge.style.border = "1px solid var(--coral)";
+    badge.textContent = `SCORE: ${score} / 10 – VULNERABLE TO DISINFORMATION`;
+  }
+
+  badge.scrollIntoView({ behavior: 'smooth' });
+}
+
+function resetQuiz() {
+  renderQuiz();
+  const badge = document.getElementById("quiz-score-badge");
+  badge.style.display = "none";
+}
+
+document.addEventListener("DOMContentLoaded", renderQuiz);
+</script>
+{% endblock %}
+

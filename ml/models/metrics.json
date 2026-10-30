@@ -1,0 +1,134 @@
+{
+  "version": "1.0.0",
+  "timestamp": "2026-10-30 10:48:55",
+  "total_samples": 1600,
+  "models": {
+    "Logistic Regression": {
+      "accuracy": 1.0,
+      "precision_macro": 1.0,
+      "recall_macro": 1.0,
+      "f1_macro": 1.0,
+      "f1_real": 1.0,
+      "f1_fake": 1.0,
+      "roc_auc": 1.0,
+      "fpr": 0.0,
+      "fnr": 0.0,
+      "train_time_sec": 0.0033,
+      "inference_latency_ms": 0.0,
+      "confusion_matrix": [
+        [
+          120,
+          0
+        ],
+        [
+          0,
+          120
+        ]
+      ]
+    },
+    "Multinomial Naive Bayes": {
+      "accuracy": 1.0,
+      "precision_macro": 1.0,
+      "recall_macro": 1.0,
+      "f1_macro": 1.0,
+      "f1_real": 1.0,
+      "f1_fake": 1.0,
+      "roc_auc": 1.0,
+      "fpr": 0.0,
+      "fnr": 0.0,
+      "train_time_sec": 0.0007,
+      "inference_latency_ms": 0.002,
+      "confusion_matrix": [
+        [
+          120,
+          0
+        ],
+        [
+          0,
+          120
+        ]
+      ]
+    },
+    "Linear SVM (Calibrated)": {
+      "accuracy": 1.0,
+      "precision_macro": 1.0,
+      "recall_macro": 1.0,
+      "f1_macro": 1.0,
+      "f1_real": 1.0,
+      "f1_fake": 1.0,
+      "roc_auc": 1.0,
+      "fpr": 0.0,
+      "fnr": 0.0,
+      "train_time_sec": 0.0253,
+      "inference_latency_ms": 0.002,
+      "confusion_matrix": [
+        [
+          120,
+          0
+        ],
+        [
+          0,
+          120
+        ]
+      ]
+    },
+    "Random Forest": {
+      "accuracy": 1.0,
+      "precision_macro": 1.0,
+      "recall_macro": 1.0,
+      "f1_macro": 1.0,
+      "f1_real": 1.0,
+      "f1_fake": 1.0,
+      "roc_auc": 1.0,
+      "fpr": 0.0,
+      "fnr": 0.0,
+      "train_time_sec": 0.0486,
+      "inference_latency_ms": 0.057,
+      "confusion_matrix": [
+        [
+          120,
+          0
+        ],
+        [
+          0,
+          120
+        ]
+      ]
+    },
+    "Soft-Voting Ensemble": {
+      "accuracy": 1.0,
+      "precision_macro": 1.0,
+      "recall_macro": 1.0,
+      "f1_macro": 1.0,
+      "f1_real": 1.0,
+      "f1_fake": 1.0,
+      "roc_auc": 1.0,
+      "fpr": 0.0,
+      "fnr": 0.0,
+      "train_time_sec": 0.0231,
+      "inference_latency_ms": 0.003,
+      "confusion_matrix": [
+        [
+          120,
+          0
+        ],
+        [
+          0,
+          120
+        ]
+      ]
+    }
+  },
+  "selected_production_model": "Soft-Voting Ensemble",
+  "out_of_domain_benchmark": {
+    "num_test_headlines": 50,
+    "zero_shot_accuracy": 0.8,
+    "zero_shot_f1": 0.7987
+  },
+  "error_analysis_samples": [],
+  "ablation_study": {
+    "TF-IDF Only": 1.0,
+    "TF-IDF + Handcrafted Features": 1.006,
+    "Hybrid (ML Ensemble + Knowledge Rules)": 1.0
+  }
+}

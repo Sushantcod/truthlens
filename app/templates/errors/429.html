@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}429 – Rate Limit Exceeded{% endblock %}
+
+{% block content %}
+<div style="max-width: 500px; margin: 60px auto; text-align: center;">
+  <p class="eyebrow" style="color: var(--yellow);">// 429 TRAFFIC RATE LIMIT EXCEEDED</p>
+  <h1 style="font-size: 44px; margin-bottom: 12px;">Patience Required<span>.</span></h1>
+  <p style="color: var(--muted); font-size: 14px; margin-bottom: 24px;">
+    To prevent automated bot abuse and preserve computational fairness, verification requests from this IP are rate-limited. Please pause briefly before repeating your request.
+  </p>
+  <a href="{{ url_for('main.index') }}" class="btn btn-primary">Return to Home →</a>
+</div>
+{% endblock %}
+

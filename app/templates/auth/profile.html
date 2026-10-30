@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block title %}User Profile – TruthLens{% endblock %}
+
+{% block content %}
+<div style="max-width: 720px; margin: 30px auto;">
+  <p class="eyebrow">// ACCOUNT SETTINGS & DEVELOPER ACCESS</p>
+  <h1>User Profile<span>.</span></h1>
+
+  <!-- Profile Update Card -->
+  <div class="card-box" style="margin-bottom: 24px;">
+    <h3 style="font-size: 20px; margin-bottom: 18px;">Account Details</h3>
+
+    <form method="POST" action="{{ url_for('auth.profile') }}">
+      {{ form.hidden_tag() }}
+
+      <div style="margin-bottom: 18px;">
+        <label class="form-label" for="{{ form.full_name.id }}">{{ form.full_name.label }}</label>
+        {{ form.full_name(class="form-control") }}
+      </div>
+
+      <div style="margin-bottom: 18px;">
+        <label class="form-label">Email Address (Fixed)</label>
+        <input type="text" class="form-control" value="{{ current_user.email }}" disabled style="opacity: 0.65;">
+      </div>
+
+      <div style="padding-top: 16px; margin-top: 16px; border-top: 1px solid var(--line);">
+        <p class="eyebrow">UPDATE CREDENTIALS</p>
+
+        <div style="margin-bottom: 16px;">
+          <label class="form-label" for="{{ form.current_password.id }}">{{ form.current_password.label }}</label>
+          {{ form.current_password(class="form-control") }}
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 20px;">
+          <div>
+            <label class="form-label" for="{{ form.new_password.id }}">{{ form.new_password.label }}</label>
+            {{ form.new_password(class="form-control") }}
+          </div>
+          <div>
+            <label class="form-label" for="{{ form.confirm_new_password.id }}">{{ form.confirm_new_password.label }}</label>
+            {{ form.confirm_new_password(class="form-control") }}
+          </div>
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary">
+        Save Profile Changes
+      </button>
+    </form>
+  </div>
+
+  <!-- Developer REST API Key Card -->
+  <div class="card-box" style="margin-bottom: 24px;">
+    <p class="eyebrow">// REST API DEVELOPER TOKEN</p>
+    <h3 style="font-size: 20px; margin-bottom: 10px;">Programmatic Access Key</h3>
+    <p style="color: var(--muted); font-size: 13px; margin-bottom: 16px;">
+      Use this token to query the <code>/api/predict</code> and <code>/api/history</code> endpoints via the <code>X-API-Key</code> HTTP header.
+    </p>
+
+    <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 16px;">
+      <input type="text" readonly class="form-control" value="{{ current_user.api_key }}" style="font-family: 'DM Mono', monospace; font-size: 12px; background: var(--paper);">
+      <button type="button" class="btn btn-sm" onclick="navigator.clipboard.writeText('{{ current_user.api_key }}'); alert('API token copied to clipboard!');">COPY</button>
+    </div>
+
+    <form method="POST" action="{{ url_for('auth.regenerate_api_key') }}" onsubmit="return confirm('Regenerating this key will immediately invalidate your previous key. Continue?');">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <button type="submit" class="btn btn-sm">Regenerate API Token</button>
+      <a href="{{ url_for('api.api_docs') }}" class="btn btn-sm" style="margin-left: 8px;">View API Docs</a>
+    </form>
+  </div>
+
+  <!-- Danger Zone Card -->
+  <div class="card-box" style="border-color: var(--coral); background: var(--white);">
+    <p class="eyebrow" style="color: var(--coral);">// DANGER ZONE</p>
+    <h3 style="font-size: 18px; margin-bottom: 8px;">Delete Account Permanently</h3>
+    <p style="color: var(--muted); font-size: 13px; margin-bottom: 16px;">
+      Deleting your account will erase all your personal audit history, API keys, and feedback records irreversibly.
+    </p>
+
+    <form method="POST" action="{{ url_for('auth.delete_account') }}" onsubmit="return confirm('Are you sure you want to permanently delete your account and all history? This cannot be undone.');">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <button type="submit" class="btn btn-coral btn-sm">Permanently Erase My Account</button>
+    </form>
+  </div>
+</div>
+{% endblock %}
+

@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block title %}System Activity Logs – Admin Studio{% endblock %}
+
+{% block content %}
+<div style="max-width: 1040px; margin: 10px auto;">
+  <div style="display: flex; justify-content: space-between; align-items: end; margin-bottom: 24px;">
+    <div>
+      <p class="eyebrow" style="color: var(--coral);">// SYSTEM AUDIT & SECURITY TELEMETRY</p>
+      <h1>Activity Logs<span>.</span></h1>
+    </div>
+    <a href="{{ url_for('admin.dashboard') }}" class="btn btn-sm">← Back to Dashboard</a>
+  </div>
+
+  <div class="card-box" style="padding: 0; overflow: hidden;">
+    {% if logs and logs|length > 0 %}
+      <table class="custom-table" style="margin: 0;">
+        <thead>
+          <tr>
+            <th>Timestamp (UTC)</th>
+            <th>Event Action</th>
+            <th>Account</th>
+            <th>Operational Details</th>
+            <th>IP Origin</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for log in logs %}
+            <tr>
+              <td style="font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted); white-space: nowrap;">
+                {{ log.created_at.strftime('%Y-%m-%d %H:%M:%S') }}
+              </td>
+              <td>
+                <span class="badge-tag" style="background: var(--paper); color: var(--ink); border: 1px solid var(--line); font-size: 9px;">
+                  {{ log.action }}
+                </span>
+              </td>
+              <td style="font-family: 'DM Mono', monospace; font-size: 11px;">
+                {{ log.user.email if log.user else 'Anonymous' }}
+              </td>
+              <td style="font-size: 12px; color: var(--muted);">
+                {{ log.details or '-' }}
+              </td>
+              <td style="font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted);">
+                {{ log.ip_address or 'Localhost' }}
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+      {% if pagination.pages > 1 %}
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 14px 20px; border-top: 1px solid var(--line); font-family: 'DM Mono', monospace; font-size: 11px;">
+          <div>Page {{ pagination.page }} of {{ pagination.pages }}</div>
+          <div style="display: flex; gap: 6px;">
+            {% if pagination.has_prev %}
+              <a href="{{ url_for('admin.activity_logs', page=pagination.prev_num) }}" class="btn btn-sm">← Prev</a>
+            {% endif %}
+            {% if pagination.has_next %}
+              <a href="{{ url_for('admin.activity_logs', page=pagination.next_num) }}" class="btn btn-sm">Next →</a>
+            {% endif %}
+          </div>
+        </div>
+      {% endif %}
+    {% else %}
+      <div style="padding: 30px; text-align: center; color: var(--muted); font-size: 13px;">No activity logs recorded.</div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
+

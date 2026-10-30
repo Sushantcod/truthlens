@@ -1,0 +1,219 @@
+{% extends "base.html" %}
+
+{% block title %}Analytical Dashboard – TruthLens{% endblock %}
+
+{% block content %}
+<div style="max-width: 1040px; margin: 10px auto;">
+  <div style="display: flex; justify-content: space-between; align-items: end; margin-bottom: 28px; flex-wrap: wrap; gap: 16px;">
+    <div>
+      <p class="eyebrow">// PERSONAL TELEMETRY & AUDIT ANALYTICS</p>
+      <h1>Verification Dashboard<span>.</span></h1>
+    </div>
+    <div>
+      <a href="{{ url_for('main.check_news') }}" class="btn btn-primary">+ New Verification Audit</a>
+    </div>
+  </div>
+
+  <!-- Metric Counters Row -->
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 18px; margin-bottom: 32px;">
+    <div class="card-box">
+      <p class="eyebrow">TOTAL CLAIMS AUDITED</p>
+      <div style="font-family: 'DM Mono', monospace; font-size: 36px; font-weight: 700; color: var(--ink);">{{ total_checks }}</div>
+      <p style="color: var(--muted); font-size: 11px; margin: 0; font-family: 'DM Mono', monospace;">Cumulative verifications</p>
+    </div>
+
+    <div class="card-box">
+      <p class="eyebrow" style="color: var(--coral);">DISINFORMATION SIGNALS</p>
+      <div style="font-family: 'DM Mono', monospace; font-size: 36px; font-weight: 700; color: var(--coral);">{{ fake_count }}</div>
+      <p style="color: var(--muted); font-size: 11px; margin: 0; font-family: 'DM Mono', monospace;">{{ fake_pct }}% of personal checks</p>
+    </div>
+
+    <div class="card-box">
+      <p class="eyebrow" style="color: var(--teal);">VERIFIED REAL CLAIMS</p>
+      <div style="font-family: 'DM Mono', monospace; font-size: 36px; font-weight: 700; color: var(--teal);">{{ real_count }}</div>
+      <p style="color: var(--muted); font-size: 11px; margin: 0; font-family: 'DM Mono', monospace;">{{ real_pct }}% of personal checks</p>
+    </div>
+
+    <div class="card-box">
+      <p class="eyebrow" style="color: #8c6d17;">INCONCLUSIVE / UNCERTAIN</p>
+      <div style="font-family: 'DM Mono', monospace; font-size: 36px; font-weight: 700; color: var(--yellow);">{{ uncertain_count }}</div>
+      <p style="color: var(--muted); font-size: 11px; margin: 0; font-family: 'DM Mono', monospace;">Calibrated uncertainty</p>
+    </div>
+  </div>
+
+  <!-- Charts Row: Doughnut Distribution & Trend Line -->
+  <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.8fr); gap: 24px; margin-bottom: 32px;">
+    <!-- Doughnut Chart -->
+    <div class="card-box">
+      <p class="eyebrow">VERDICT DISTRIBUTION</p>
+      <h3 style="font-size: 18px; margin-bottom: 14px;">Audit Breakdown</h3>
+      <div style="height: 240px; position: relative;">
+        {% if total_checks > 0 %}
+          <canvas id="verdictPieChart"></canvas>
+        {% else %}
+          <div style="display: flex; height: 100%; align-items: center; justify-content: center; color: var(--muted); font-size: 13px;">
+            No audit records yet. Submit an article to populate.
+          </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Trend Line -->
+    <div class="card-box">
+      <p class="eyebrow">CREDIBILITY TRAJECTORY</p>
+      <h3 style="font-size: 18px; margin-bottom: 14px;">Recent Score History</h3>
+      <div style="height: 240px; position: relative;">
+        {% if recent_trend and recent_trend|length > 0 %}
+          <canvas id="trendLineChart"></canvas>
+        {% else %}
+          <div style="display: flex; height: 100%; align-items: center; justify-content: center; color: var(--muted); font-size: 13px;">
+            Audit trajectory graph will appear as you verify claims.
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent Activity Table -->
+  <div class="card-box">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+      <div>
+        <p class="eyebrow" style="margin-bottom: 2px;">RECENT AUDIT LOG</p>
+        <h3 style="font-size: 20px; margin: 0;">Latest Verified Content</h3>
+      </div>
+      <a href="{{ url_for('main.history') }}" class="btn btn-sm">Full History Archive →</a>
+    </div>
+
+    {% if recent_records and recent_records|length > 0 %}
+      <div style="overflow-x: auto;">
+        <table class="custom-table">
+          <thead>
+            <tr>
+              <th>Timestamp</th>
+              <th>Headline / Snippet</th>
+              <th>Mode</th>
+              <th>Verdict</th>
+              <th>Score</th>
+              <th style="text-align: right;">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for r in recent_records %}
+              <tr>
+                <td style="font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted);">
+                  {{ r.created_at.strftime('%Y-%m-%d %H:%M') }}
+                </td>
+                <td style="font-weight: 500;">
+                  <a href="{{ url_for('main.result', check_id=r.id) }}" style="color: var(--ink); text-decoration: none;">
+                    {{ r.title[:55] }}{% if r.title|length > 55 %}...{% endif %}
+                  </a>
+                </td>
+                <td>
+                  <span style="font-family: 'DM Mono', monospace; font-size: 10px; color: var(--muted); text-transform: uppercase;">
+                    {{ r.input_mode }}
+                  </span>
+                </td>
+                <td>
+                  {% if r.verdict == 'REAL' %}
+                    <span class="badge-tag badge-real">REAL</span>
+                  {% elif r.verdict == 'FAKE' %}
+                    <span class="badge-tag badge-fake">FAKE</span>
+                  {% else %}
+                    <span class="badge-tag badge-uncertain">UNCERTAIN</span>
+                  {% endif %}
+                </td>
+                <td style="font-family: 'DM Mono', monospace; font-size: 13px; font-weight: 600;">
+                  {{ r.credibility_score }}/100
+                </td>
+                <td style="text-align: right;">
+                  <a href="{{ url_for('main.result', check_id=r.id) }}" class="btn btn-sm">View Report →</a>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <div style="padding: 30px; text-align: center; color: var(--muted); font-size: 14px;">
+        You have not conducted any verifications yet.
+        <div style="margin-top: 12px;">
+          <a href="{{ url_for('main.check_news') }}" class="btn btn-sm btn-primary">Start First Verification</a>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  // 1. Verdict Doughnut Chart
+  const pieCtx = document.getElementById("verdictPieChart");
+  if (pieCtx) {
+    new Chart(pieCtx, {
+      type: 'doughnut',
+      data: {
+        labels: ['Verified Real', 'Fake / Disinformation', 'Uncertain'],
+        datasets: [{
+          data: [{{ real_count }}, {{ fake_count }}, {{ uncertain_count }}],
+          backgroundColor: ['#287c70', '#e46c50', '#e8c45e'],
+          borderWidth: 2,
+          borderColor: 'var(--white)'
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            position: 'bottom',
+            labels: { font: { family: 'DM Mono', size: 10 } }
+          }
+        }
+      }
+    });
+  }
+
+  // 2. Trend Line Chart
+  const trendCtx = document.getElementById("trendLineChart");
+  const trendData = {{ recent_trend|tojson|safe }};
+  if (trendCtx && trendData && trendData.length > 0) {
+    new Chart(trendCtx, {
+      type: 'line',
+      data: {
+        labels: trendData.map(d => d.date),
+        datasets: [{
+          label: 'Credibility Score (0-100)',
+          data: trendData.map(d => d.score),
+          borderColor: '#287c70',
+          backgroundColor: 'rgba(40, 124, 112, 0.08)',
+          tension: 0.25,
+          fill: true,
+          pointRadius: 4,
+          pointBackgroundColor: '#287c70'
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false }
+        },
+        scales: {
+          y: {
+            min: 0,
+            max: 100,
+            grid: { color: 'rgba(120, 120, 120, 0.15)' },
+            ticks: { font: { family: 'DM Mono', size: 10 } }
+          },
+          x: {
+            grid: { display: false },
+            ticks: { font: { family: 'DM Mono', size: 10 } }
+          }
+        }
+      }
+    });
+  }
+});
+</script>
+{% endblock %}
+

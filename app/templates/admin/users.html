@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block title %}User Management – Admin Studio{% endblock %}
+
+{% block content %}
+<div style="max-width: 1040px; margin: 10px auto;">
+  <div style="display: flex; justify-content: space-between; align-items: end; margin-bottom: 24px;">
+    <div>
+      <p class="eyebrow" style="color: var(--coral);">// ACCESS GOVERNANCE</p>
+      <h1>User Directory<span>.</span></h1>
+    </div>
+    <a href="{{ url_for('admin.dashboard') }}" class="btn btn-sm">← Back to Dashboard</a>
+  </div>
+
+  <div class="card-box" style="padding: 0; overflow: hidden;">
+    <table class="custom-table" style="margin: 0;">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Full Name & Email</th>
+          <th>Role</th>
+          <th>Status</th>
+          <th>Registered</th>
+          <th>Total Checks</th>
+          <th style="text-align: right;">Administrative Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for u in users %}
+          <tr>
+            <td style="font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted);">#{{ u.id }}</td>
+            <td>
+              <div style="font-weight: 600;">{{ u.full_name }}</div>
+              <div style="font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted);">{{ u.email }}</div>
+            </td>
+            <td>
+              {% if u.role == 'admin' %}
+                <span class="badge-tag" style="background: var(--coral-soft); color: var(--coral); border: 1px solid var(--coral);">ADMIN</span>
+              {% else %}
+                <span class="badge-tag" style="background: var(--paper); color: var(--ink); border: 1px solid var(--line);">USER</span>
+              {% endif %}
+            </td>
+            <td>
+              {% if u.is_active_account %}
+                <span style="color: var(--teal); font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 600;">ACTIVE</span>
+              {% else %}
+                <span style="color: var(--coral); font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 600;">DEACTIVATED</span>
+              {% endif %}
+            </td>
+            <td style="font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted);">
+              {{ u.created_at.strftime('%Y-%m-%d') }}
+            </td>
+            <td style="font-family: 'DM Mono', monospace; font-size: 12px; font-weight: 600;">
+              {{ u.checks.count() }}
+            </td>
+            <td style="text-align: right; white-space: nowrap;">
+              {% if u.id != current_user.id %}
+                <!-- Toggle Status -->
+                <form method="POST" action="{{ url_for('admin.toggle_user_status', user_id=u.id) }}" style="display: inline-block;">
+                  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                  <button type="submit" class="btn btn-sm">
+                    {{ 'Deactivate' if u.is_active_account else 'Reactivate' }}
+                  </button>
+                </form>
+
+                <!-- Toggle Role -->
+                <form method="POST" action="{{ url_for('admin.toggle_user_role', user_id=u.id) }}" style="display: inline-block; margin-left: 4px;">
+                  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                  <button type="submit" class="btn btn-sm">
+                    {{ 'Demote' if u.role == 'admin' else 'Promote Admin' }}
+                  </button>
+                </form>
+
+                <!-- Delete -->
+                <form method="POST" action="{{ url_for('admin.delete_user', user_id=u.id) }}" style="display: inline-block; margin-left: 4px;" onsubmit="return confirm('Permanently erase user {{ u.email }}?');">
+                  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                  <button type="submit" class="btn btn-sm btn-coral">Delete</button>
+                </form>
+              {% else %}
+                <span style="font-family: 'DM Mono', monospace; font-size: 10px; color: var(--muted);">(Current Session)</span>
+              {% endif %}
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
+

@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}404 – Page Not Found{% endblock %}
+
+{% block content %}
+<div style="max-width: 500px; margin: 60px auto; text-align: center;">
+  <p class="eyebrow" style="color: var(--coral);">// 404 RESOURCE NOT FOUND</p>
+  <h1 style="font-size: 48px; margin-bottom: 12px;">Missing Record<span>.</span></h1>
+  <p style="color: var(--muted); font-size: 14px; margin-bottom: 24px;">
+    The requested verification report or URL could not be located in our index. It may have been relocated or purged.
+  </p>
+  <a href="{{ url_for('main.index') }}" class="btn btn-primary">Return to Safety (Home) →</a>
+</div>
+{% endblock %}
+
