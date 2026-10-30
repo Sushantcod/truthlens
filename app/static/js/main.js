@@ -44,7 +44,14 @@ function initThemeToggle() {
 
 function updateThemeBtnIcon(btn, theme) {
   if (!btn) return;
-  btn.textContent = theme === "dark" ? "☀ LIGHT" : "☽ DARK";
+  const icon = document.getElementById("theme-icon");
+  const label = document.getElementById("theme-label");
+  if (icon && label) {
+    icon.textContent = theme === "dark" ? "☀" : "🌙";
+    label.textContent = theme === "dark" ? "Light" : "Dark";
+  } else {
+    btn.textContent = theme === "dark" ? "☀ Light" : "🌙 Dark";
+  }
 }
 
 /* ================= Password Utilities ================= */

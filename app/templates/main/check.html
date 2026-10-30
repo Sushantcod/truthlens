@@ -3,12 +3,12 @@
 {% block title %}Verify News & Claims – TruthLens{% endblock %}
 
 {% block content %}
-<div style="max-width: 820px; margin: 20px auto;">
+<div style="max-width: 860px; margin: 10px auto;">
   <div style="margin-bottom: 24px;">
-    <p class="eyebrow">// MULTI-MODAL MISINFORMATION AUDITOR</p>
-    <h1>Audit Article Credibility<span>.</span></h1>
-    <p class="lead-text">
-      Select your preferred input ingestion mode: directly paste statement text, provide a live news URL to scrape, or upload a raw text transcript.
+    <p class="eyebrow" style="color: var(--teal); margin-bottom: 4px;">// MULTI-MODAL CREDIBILITY AUDITOR</p>
+    <h1 style="font-size: 34px; margin-bottom: 8px;">Audit News Credibility<span>.</span></h1>
+    <p class="lead-text" style="font-size: 15px;">
+      Paste a headline or article, enter a live article URL to scrape, or upload a raw text transcript for instant credibility analysis.
     </p>
   </div>
 
@@ -16,64 +16,82 @@
     <form method="POST" enctype="multipart/form-data" id="audit-form">
       {{ form.hidden_tag() }}
 
-      <!-- Mode Selector -->
+      <!-- Clean Tab Switcher -->
       <div style="margin-bottom: 24px;">
-        <label class="form-label">CHOOSE INPUT METHOD</label>
-        <div class="mode-switch" role="radiogroup">
-          {% for subfield in form.input_mode %}
-            <label class="mode-button" style="cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
-              {{ subfield(style="display:none;") }}
-              <span>{{ subfield.label.text }}</span>
-            </label>
-          {% endfor %}
+        <label class="form-label" style="font-size: 11.5px; margin-bottom: 8px;">1. SELECT INPUT METHOD</label>
+        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+          <label class="btn btn-sm mode-pill-btn active" id="tab-btn-text" style="cursor: pointer;">
+            <input type="radio" name="input_mode" value="text" checked style="display: none;">
+            <span>✍️ Paste Text / Headline</span>
+          </label>
+          <label class="btn btn-sm mode-pill-btn" id="tab-btn-url" style="cursor: pointer;">
+            <input type="radio" name="input_mode" value="url" style="display: none;">
+            <span>🔗 Article Web Link</span>
+          </label>
+          <label class="btn btn-sm mode-pill-btn" id="tab-btn-file" style="cursor: pointer;">
+            <input type="radio" name="input_mode" value="file" style="display: none;">
+            <span>📄 Upload Text File (.txt)</span>
+          </label>
         </div>
       </div>
 
-      <!-- Quick Fill Sample Prompts for Instant Testing -->
-      <div style="margin-bottom: 20px; display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
-        <span class="eyebrow" style="margin-bottom: 0;">LOAD TEST SAMPLES:</span>
-        <button type="button" class="btn btn-sm" onclick="loadSample('fake')">Fake Disinformation Sample</button>
-        <button type="button" class="btn btn-sm" onclick="loadSample('real')">Verified Science Report</button>
-        <button type="button" class="btn btn-sm" onclick="loadSample('neutral')">Ambiguous / Uncertain Sample</button>
+      <!-- Quick Sample Buttons for Instant Testing -->
+      <div style="margin-bottom: 22px; padding: 14px 18px; background: var(--paper); border: 1px dashed var(--line); border-radius: 6px;">
+        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
+          <span style="font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 600; color: var(--muted);">QUICK TEST SAMPLES:</span>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <button type="button" class="btn btn-sm" onclick="loadSample('fake')" style="background: var(--coral-soft); color: var(--coral); border-color: var(--coral); font-size: 11px;">
+              🚨 Fake Disinformation Sample
+            </button>
+            <button type="button" class="btn btn-sm" onclick="loadSample('real')" style="background: var(--teal-soft); color: var(--teal); border-color: var(--teal); font-size: 11px;">
+              ✅ Verified Science News
+            </button>
+            <button type="button" class="btn btn-sm" onclick="loadSample('neutral')" style="background: var(--yellow-soft); color: #8a6813; border-color: var(--yellow); font-size: 11px;">
+              ⚖️ Ambiguous Sample
+            </button>
+          </div>
+        </div>
       </div>
 
-      <!-- Title / Headline -->
+      <!-- Headline / Title -->
       <div style="margin-bottom: 20px;">
-        <label class="form-label" for="{{ form.title.id }}">{{ form.title.label }}</label>
-        {{ form.title(class="form-control", id="claim-title") }}
+        <label class="form-label" for="{{ form.title.id }}">2. HEADLINE OR CLAIM TITLE (OPTIONAL)</label>
+        {{ form.title(class="form-control", id="claim-title", placeholder="e.g. 'Classified Memo Leaked' or leave blank to infer from text") }}
       </div>
 
       <!-- Mode 1: Paste Text -->
       <div id="input-group-text" style="margin-bottom: 24px;">
-        <label class="form-label" for="{{ form.article_text.id }}">{{ form.article_text.label }}</label>
-        {{ form.article_text(class="form-control", id="claim-text", style="min-height: 160px; font-size: 15px;") }}
+        <label class="form-label" for="{{ form.article_text.id }}">3. ARTICLE BODY OR STATEMENT TEXT</label>
+        {{ form.article_text(class="form-control", id="claim-text", style="min-height: 160px; font-size: 15px; line-height: 1.6;", placeholder="Paste the full news article, paragraph, or viral statement here...") }}
       </div>
 
       <!-- Mode 2: Article URL -->
       <div id="input-group-url" style="margin-bottom: 24px; display: none;">
-        <label class="form-label" for="{{ form.article_url.id }}">{{ form.article_url.label }}</label>
-        {{ form.article_url(class="form-control", placeholder="https://www.reuters.com/world/...") }}
-        <p style="color: var(--muted); font-size: 11px; margin-top: 6px; font-family: 'DM Mono', monospace;">
-          Our backend scraper will automatically extract the headline, canonical body paragraphs, and source domain.
+        <label class="form-label" for="{{ form.article_url.id }}">3. ARTICLE WEB ADDRESS (URL)</label>
+        {{ form.article_url(class="form-control", placeholder="https://www.reuters.com/world/us/sample-article-2026") }}
+        <p style="color: var(--muted); font-size: 12px; margin-top: 6px;">
+          Our backend scraper will automatically extract the title, body content, and verify the domain against known watchlists.
         </p>
       </div>
 
       <!-- Mode 3: Upload Text File -->
       <div id="input-group-file" style="margin-bottom: 24px; display: none;">
-        <label class="form-label" for="{{ form.article_file.id }}">{{ form.article_file.label }}</label>
+        <label class="form-label" for="{{ form.article_file.id }}">3. CHOOSE PLAIN TEXT FILE (.TXT)</label>
         {{ form.article_file(class="form-control") }}
-        <p style="color: var(--muted); font-size: 11px; margin-top: 6px; font-family: 'DM Mono', monospace;">
-          Upload a UTF-8 encoded plain text (.txt) file up to 4MB in size.
+        <p style="color: var(--muted); font-size: 12px; margin-top: 6px;">
+          Upload a UTF-8 formatted .txt file up to 4MB in size.
         </p>
       </div>
 
-      <!-- Submit Action -->
-      <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 16px; border-top: 1px solid var(--line);">
-        <span style="font-family: 'DM Mono', monospace; font-size: 10px; color: var(--muted); letter-spacing: 0.8px;">
-          MODEL: SOFT-VOTING META-ENSEMBLE (LR + MNB + CALIBRATED SVM)
-        </span>
-        <button type="submit" id="submit-btn" class="btn btn-primary" style="min-height: 44px; padding: 0 24px;">
-          Execute Verification Audit →
+      <!-- Submit Action Row -->
+      <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 20px; border-top: 1px solid var(--line); flex-wrap: wrap; gap: 14px;">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--teal);"></span>
+          <span style="font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted);">Model ready (Soft-Voting Meta-Ensemble)</span>
+        </div>
+
+        <button type="submit" id="submit-btn" class="btn btn-primary" style="min-height: 46px; padding: 0 28px; font-size: 14px;">
+          Run Credibility Audit →
         </button>
       </div>
     </form>
@@ -82,7 +100,7 @@
 
 <script>
 function loadSample(type) {
-  // Ensure text mode radio is selected
+  // Switch to text mode
   const textRadio = document.querySelector("input[name='input_mode'][value='text']");
   if (textRadio) {
     textRadio.checked = true;
@@ -93,27 +111,29 @@ function loadSample(type) {
   const textInput = document.getElementById("claim-text");
 
   if (type === 'fake') {
-    titleInput.value = "SHOCKING BOMBSHELL: Underground Salt Flats Staged Moon Landings!";
-    textInput.value = "SHOCKING TRUTH EXPOSED! A leaked underground Pentagon whistle-blower document confirms what independent researchers knew all along: NASA staged every single lunar landing inside an abandoned salt flat in Utah! Corrupt mainstream media and global elites are desperately trying to bury this bombshell revelation before the public wakes up! SHARE THIS NOW BEFORE THEY DELETE IT FROM THE INTERNET!";
+    titleInput.value = "SHOCKING BOMBSHELL: Miracle Lemon Cure Suppressed by Pharma Cartels!";
+    textInput.value = "SHOCKING TRUTH EXPOSED! A leaked underground whistle-blower document confirms what independent investigators knew all along: drinking industrial baking soda and boiled lemon juice destroys 100% of stage 4 cancer cells within 24 hours without chemotherapy! Corrupt medical cartels are threatening any doctor who speaks the forbidden truth! SHARE THIS NOW BEFORE THEY DELETE IT FROM THE INTERNET!";
   } else if (type === 'real') {
-    titleInput.value = "Global Climate Summit Concludes with Binding Emissions Accord";
-    textInput.value = "Delegates from over 190 nations reached a landmark agreement on Friday to reduce methane emissions by 30 percent before 2030. The accord, signed after two weeks of exhaustive deliberations in Geneva, introduces mandatory verification mechanisms and financing commitments for emerging economies transitioning to renewable energy grids. Environmental ministers commended the multilateral consensus, citing independent assessments by the Intergovernmental Panel on Climate Change (IPCC) validating the mitigation framework.";
+    titleInput.value = "Global Climate Accord Concluded with Mandatory Emissions Reductions";
+    textInput.value = "Delegates from over 190 nations reached a landmark agreement on Friday to reduce industrial methane emissions by 30 percent before 2030. The accord, signed after two weeks of exhaustive deliberations in Geneva, introduces mandatory verification mechanisms and financing commitments for emerging economies transitioning to renewable energy grids. Environmental ministers commended the multilateral consensus, citing independent assessments by the IPCC.";
   } else if (type === 'neutral') {
-    titleInput.value = "Municipal Council Announces Annual City Park Maintenance Timetable";
-    textInput.value = "The regional district council held its monthly public assembly on Tuesday morning to discuss upcoming tree trimming schedules, community center reservations, and resurfacing contracts for local bicycle pathways. Residents are encouraged to review the draft timetable online.";
+    titleInput.value = "Municipal Transit Commission Schedules Community Review Meeting";
+    textInput.value = "The regional transportation district announced Tuesday that its monthly public assembly will convene next week to review passenger feedback regarding evening bus timetables, station lighting upgrades, and transit pass pricing structures. Public comments are welcomed.";
   }
 }
 
-// Active styling on radio buttons
-document.querySelectorAll(".mode-switch label").forEach(label => {
-  const radio = label.querySelector("input");
-  function sync() {
-    document.querySelectorAll(".mode-switch label").forEach(l => l.classList.remove("active"));
-    if (radio.checked) label.classList.add("active");
-  }
-  radio.addEventListener("change", sync);
-  if (radio.checked) label.classList.add("active");
+// Interactive Tab Buttons
+document.querySelectorAll(".mode-pill-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".mode-pill-btn").forEach(b => {
+      b.classList.remove("active");
+      b.style.background = "var(--card-bg)";
+      b.style.color = "var(--ink)";
+    });
+    btn.classList.add("active");
+    btn.style.background = "var(--ink)";
+    btn.style.color = "var(--paper)";
+  });
 });
 </script>
 {% endblock %}
-

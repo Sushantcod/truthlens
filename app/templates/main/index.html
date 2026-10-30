@@ -3,80 +3,156 @@
 {% block title %}TruthLens – AI-Powered Fake News Detection for Social Good{% endblock %}
 
 {% block content %}
-<div style="padding: 30px 0 60px;">
-  <div style="max-width: 880px; margin-bottom: 48px;">
-    <p class="eyebrow">// NATURAL LANGUAGE PROCESSING & MACHINE LEARNING FOR PUBLIC INTEGRITY</p>
-    <h1>Democratizing Truth Through <span>Explainable AI.</span></h1>
-    <p class="lead-text">
-      {{ t.hero_desc }}
+<div style="padding: 10px 0 50px;">
+
+  <!-- Hero Section with Direct Quick-Audit -->
+  <div style="max-width: 900px; margin: 0 auto 48px; text-align: center;">
+    <p class="eyebrow" style="color: var(--teal); margin-bottom: 12px;">// CIVIC AI INTEGRITY TOOL</p>
+    <h1 style="font-size: clamp(34px, 4.8vw, 54px); margin-bottom: 16px;">
+      Instantly check if any news headline is <span>real or fake.</span>
+    </h1>
+    <p class="lead-text" style="margin: 0 auto 32px; font-size: 17px;">
+      TruthLens uses explainable machine learning and journalistic credibility checks to help you spot disinformation, verify viral claims, and see <em>exactly why</em> words are suspicious.
     </p>
 
-    <div style="display: flex; gap: 14px; margin-top: 28px; flex-wrap: wrap;">
-      <a class="btn btn-primary" style="padding: 0 24px; min-height: 46px; font-size: 12px;" href="{{ url_for('main.check_news') }}">
-        {{ t.analyze_btn }} →
-      </a>
-      <a class="btn" style="min-height: 46px;" href="{{ url_for('main.learn') }}">
-        Explore Media Literacy Quiz
-      </a>
-      <a class="btn" style="min-height: 46px;" href="{{ url_for('api.api_docs') }}">
-        Developer REST API
-      </a>
+    <!-- Quick Audit Input Card right on Hero -->
+    <div class="card-box" style="text-align: left; padding: 28px; box-shadow: 0 6px 24px rgba(0,0,0,0.06); border-width: 2px;">
+      <form method="POST" action="{{ url_for('main.check_news') }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <input type="hidden" name="input_mode" value="text">
+
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+          <label class="form-label" style="margin: 0; font-size: 12px;">ENTER HEADLINE OR PASTE ARTICLE TEXT</label>
+          <span style="font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted);">⚡ Instant Analysis</span>
+        </div>
+
+        <textarea name="article_text" id="hero-quick-text" class="form-control" rows="3" placeholder="e.g. 'BREAKING: Leaked documents prove secret moon base discovered!' or 'Federal Reserve holds interest rates steady amid cooling inflation...'" style="font-size: 15px; margin-bottom: 16px;"></textarea>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px;">
+          <!-- Quick Sample Clickers -->
+          <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
+            <span style="font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted);">TRY SAMPLE:</span>
+            <button type="button" class="btn btn-sm" onclick="setHeroText('fake')" style="font-size: 11px; background: var(--coral-soft); color: var(--coral); border-color: var(--coral);">
+              🚨 Viral Hoax
+            </button>
+            <button type="button" class="btn btn-sm" onclick="setHeroText('real')" style="font-size: 11px; background: var(--teal-soft); color: var(--teal); border-color: var(--teal);">
+              ✅ Real Science Wire
+            </button>
+            <button type="button" class="btn btn-sm" onclick="setHeroText('neutral')" style="font-size: 11px; background: var(--yellow-soft); color: #8a6813; border-color: var(--yellow);">
+              ⚖️ Ambiguous Claim
+            </button>
+          </div>
+
+          <button type="submit" class="btn btn-primary" style="min-height: 44px; padding: 0 24px; font-size: 14px;">
+            Verify Credibility Now →
+          </button>
+        </div>
+      </form>
     </div>
   </div>
 
-  <!-- Live Architecture Pillars -->
-  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; margin-bottom: 54px;">
-    <div class="card-box">
-      <p class="eyebrow">01 // NLP & REPRESENTATION</p>
-      <h3 style="font-size: 20px; margin-bottom: 8px;">Anti-Leakage N-Gram TF-IDF</h3>
-      <p style="color: var(--muted); font-size: 13px; line-height: 1.6; margin: 0;">
-        Purges systemic wire-service dateline leakage (e.g. Reuters artifacts), tokenizing and lemmatizing text with WordNet to extract generalizable semantic vectors.
-      </p>
+  <!-- 3-Step Simple How It Works Section -->
+  <div style="margin-bottom: 56px;">
+    <div style="text-align: center; margin-bottom: 32px;">
+      <p class="eyebrow">// TRANSPARENT & EASY TO USE</p>
+      <h2 style="font-size: 28px; margin: 0;">How TruthLens Works in 3 Simple Steps</h2>
     </div>
 
-    <div class="card-box">
-      <p class="eyebrow">02 // SUPERVISED LEARNING</p>
-      <h3 style="font-size: 20px; margin-bottom: 8px;">Soft-Voting Meta-Ensemble</h3>
-      <p style="color: var(--muted); font-size: 13px; line-height: 1.6; margin: 0;">
-        Combines calibrated Linear SVMs, Logistic Regression, and Multinomial Naive Bayes using cross-validated soft probabilities for resilient classification.
-      </p>
-    </div>
-
-    <div class="card-box">
-      <p class="eyebrow">03 // EXPLAINABILITY (XAI)</p>
-      <h3 style="font-size: 20px; margin-bottom: 8px;">Token Salience Highlighting</h3>
-      <p style="color: var(--muted); font-size: 13px; line-height: 1.6; margin: 0;">
-        Highlights influential lexical features directly in the text: coral tokens indicate disinformation signals while teal markers confirm factual attribution.
-      </p>
-    </div>
-
-    <div class="card-box">
-      <p class="eyebrow">04 // KNOWLEDGE-BASED REASONING</p>
-      <h3 style="font-size: 20px; margin-bottom: 8px;">Integrated Credibility Score</h3>
-      <p style="color: var(--muted); font-size: 13px; line-height: 1.6; margin: 0;">
-        Combines statistical probability with expert heuristics: domain watchlists, excessive capitalization, and anonymous attribution into a calibrated 0-100 score.
-      </p>
-    </div>
-  </div>
-
-  <!-- Societal Impact & Responsible AI Callout -->
-  <div class="card-box" style="border-left: 4px solid var(--teal); background: var(--white); padding: 32px;">
-    <div style="display: grid; grid-template-columns: 1fr auto; gap: 24px; align-items: center;">
-      <div>
-        <p class="eyebrow" style="color: var(--teal);">// RESPONSIBLE ARTIFICIAL INTELLIGENCE STATEMENT</p>
-        <h2 style="font-size: 24px; margin-bottom: 10px;">Algorithmic Humility & Human-in-the-Loop Safeguards</h2>
-        <p style="color: var(--muted); font-size: 14px; margin-bottom: 0; line-height: 1.65; max-width: 800px;">
-          TruthLens is deliberately engineered with confidence calibration thresholds: when textual signals yield inconclusive probabilities between 40% and 60%, the system flags an <strong>UNCERTAIN</strong> verdict rather than forcing a binary guess. Furthermore, every citizen can submit evidence feedback that is vetted by human administrators before retraining.
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
+      <div class="step-card">
+        <div class="step-number">STEP 01 // INPUT</div>
+        <h3 style="font-size: 19px; margin-bottom: 8px;">1. Paste Text or URL</h3>
+        <p style="color: var(--muted); font-size: 13.5px; margin: 0; line-height: 1.6;">
+          Paste a headline, article excerpt, or web link. Our engine automatically fetches the content and removes biased publisher dateline tags.
         </p>
       </div>
-      <div>
-        <div style="text-align: center; padding: 18px 24px; border: 1px solid var(--line); border-radius: 4px; background: var(--paper);">
-          <div style="font-family: 'DM Mono', monospace; font-size: 32px; font-weight: 700; color: var(--ink);">{{ total_audits }}</div>
-          <div style="font-family: 'DM Mono', monospace; font-size: 10px; color: var(--muted); letter-spacing: 1px;">TOTAL AUDITS LOGGED</div>
-        </div>
+
+      <div class="step-card">
+        <div class="step-number">STEP 02 // AUDIT</div>
+        <h3 style="font-size: 19px; margin-bottom: 8px;">2. AI & Fact Engine Scan</h3>
+        <p style="color: var(--muted); font-size: 13.5px; margin: 0; line-height: 1.6;">
+          A multi-model ensemble (Logistic Regression, Naive Bayes, Linear SVM) analyzes linguistic patterns while rule heuristics check source credibility.
+        </p>
       </div>
+
+      <div class="step-card">
+        <div class="step-number">STEP 03 // UNDERSTAND</div>
+        <h3 style="font-size: 19px; margin-bottom: 8px;">3. See Score & Evidence</h3>
+        <p style="color: var(--muted); font-size: 13.5px; margin: 0; line-height: 1.6;">
+          Receive an intuitive <strong>0 to 100 Credibility Score</strong> with exact words highlighted: coral indicates fake signals, teal confirms authentic reporting.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Clear Score Guide & Visual Reference -->
+  <div class="card-box" style="margin-bottom: 48px; padding: 32px;">
+    <div style="text-align: center; margin-bottom: 24px;">
+      <p class="eyebrow">// SIMPLE RESULT INTERPRETATION</p>
+      <h2 style="font-size: 26px; margin-bottom: 6px;">Understanding the TruthLens Verdict</h2>
+      <p style="color: var(--muted); font-size: 14px; margin: 0;">We avoid opaque black-box guessing with clearly defined credibility bands:</p>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px;">
+      <div style="padding: 18px; border: 1px solid var(--teal); border-radius: 6px; background: var(--teal-soft);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+          <span class="badge-tag badge-real">VERIFIED REAL</span>
+          <strong style="font-family: 'DM Mono', monospace; font-size: 18px; color: var(--teal);">85 - 100</strong>
+        </div>
+        <p style="font-size: 13px; color: var(--ink); margin: 0; line-height: 1.5;">
+          High factual credibility, neutral reporting tone, verified institutional attribution, and absence of sensationalist clickbait markers.
+        </p>
+      </div>
+
+      <div style="padding: 18px; border: 1px solid var(--yellow); border-radius: 6px; background: var(--yellow-soft);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+          <span class="badge-tag badge-uncertain">UNCERTAIN / CAUTION</span>
+          <strong style="font-family: 'DM Mono', monospace; font-size: 18px; color: #8a6813;">40 - 60</strong>
+        </div>
+        <p style="font-size: 13px; color: var(--ink); margin: 0; line-height: 1.5;">
+          Balanced or ambiguous signals. TruthLens practices responsible AI by communicating epistemic doubt rather than guessing.
+        </p>
+      </div>
+
+      <div style="padding: 18px; border: 1px solid var(--coral); border-radius: 6px; background: var(--coral-soft);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+          <span class="badge-tag badge-fake">LIKELY FAKE NEWS</span>
+          <strong style="font-family: 'DM Mono', monospace; font-size: 18px; color: var(--coral);">0 - 35</strong>
+        </div>
+        <p style="font-size: 13px; color: var(--ink); margin: 0; line-height: 1.5;">
+          High probability of disinformation, viral conspiracy tropes, excessive capitalization, or references to blacklisted unreliable domains.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Civic Empowerment Callout -->
+  <div style="display: flex; justify-content: space-between; align-items: center; padding: 24px 32px; background: var(--card-bg); border: 1px solid var(--line); border-radius: 6px; flex-wrap: wrap; gap: 20px;">
+    <div>
+      <h3 style="font-size: 20px; margin-bottom: 4px;">Want to test your own media literacy skills?</h3>
+      <p style="color: var(--muted); font-size: 13.5px; margin: 0;">
+        Take our quick 10-question diagnostic quiz designed by fact-checkers to gauge your ability to spot viral deception.
+      </p>
+    </div>
+    <div style="display: flex; gap: 10px;">
+      <a href="{{ url_for('main.learn') }}" class="btn btn-primary">Take 10-Question Quiz →</a>
+      <a href="{{ url_for('api.api_docs') }}" class="btn">Developer API</a>
     </div>
   </div>
 </div>
-{% endblock %}
 
+<script>
+function setHeroText(type) {
+  const ta = document.getElementById("hero-quick-text");
+  if (!ta) return;
+
+  if (type === 'fake') {
+    ta.value = "SHOCKING BOMBSHELL: Underground Salt Flats Staged Lunar Landings in Utah! NASA whistle-blower leaks classified audio proving mainstream media is lying to you! Share before big tech deletes this forever!";
+  } else if (type === 'real') {
+    ta.value = "Delegates from over 190 nations reached a landmark agreement on Friday in Geneva to reduce industrial emissions by 30 percent before 2030, introducing independent verification mechanisms overseen by the IPCC.";
+  } else if (type === 'neutral') {
+    ta.value = "The regional district council held its monthly public meeting on Tuesday to review upcoming community park maintenance schedules and bicycle path repairs.";
+  }
+}
+</script>
+{% endblock %}
