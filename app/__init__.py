@@ -110,6 +110,8 @@ def create_app(config_name: str = "default") -> Flask:
     from app.routes.admin import admin_bp
     from app.routes.api import api_bp
 
+    csrf.exempt(api_bp)
+
     app.register_blueprint(auth_bp, url_prefix="/auth")
     app.register_blueprint(main_bp, url_prefix="")
     app.register_blueprint(admin_bp, url_prefix="/admin")
