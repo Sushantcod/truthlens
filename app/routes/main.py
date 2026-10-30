@@ -25,6 +25,8 @@ from flask import (
     session,
     Response,
     abort,
+    send_from_directory,
+    current_app,
 )
 from flask_login import login_required, current_user
 
@@ -36,6 +38,17 @@ from ml.predict import predict
 
 logger = logging.getLogger("truthlens.main")
 main_bp = Blueprint("main", __name__)
+
+
+@main_bp.route("/favicon.ico")
+def favicon():
+    """Serve favicon directly from root path."""
+    import os
+    return send_from_directory(
+        os.path.join(current_app.root_path, "static"),
+        "favicon.ico",
+        mimetype="image/vnd.microsoft.icon",
+    )
 
 
 @main_bp.route("/")

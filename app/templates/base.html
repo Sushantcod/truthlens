@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#f4f2ea">
   <title>{% block title %}TruthLens{% endblock %} – AI-Powered Fact Verification</title>
+  <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+  <link rel="icon" type="image/png" sizes="64x64" href="{{ url_for('static', filename='images/favicon.png') }}">
+  <link rel="apple-touch-icon" href="{{ url_for('static', filename='images/favicon.png') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
   <!-- Chart.js for data visualization -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
@@ -18,9 +21,7 @@
       <header class="topbar">
         <!-- Logo / Brandmark -->
         <a class="brand-link" href="{{ url_for('main.index') }}" aria-label="TruthLens Home">
-          <div class="brand-icon">
-            <span class="sym-x">✕</span><span class="sym-check">✓</span>
-          </div>
+          <img src="{{ url_for('static', filename='images/logo-mark.png') }}" alt="TruthLens Logo" class="brand-logo-img">
           <div class="brand-text-group">
             <span class="brand-title">TruthLens<span>.</span></span>
             <span class="brand-tagline">AI Credibility Engine</span>

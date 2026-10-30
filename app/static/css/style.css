@@ -99,6 +99,24 @@ button, input, select, textarea { font: inherit; color: inherit; }
   flex-shrink: 0;
 }
 
+.brand-logo-img {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  object-fit: contain;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  border: 1px solid var(--line);
+  background: var(--card-bg);
+  padding: 2px;
+  flex-shrink: 0;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.brand-link:hover .brand-logo-img {
+  transform: scale(1.05);
+  box-shadow: 0 3px 8px rgba(0,0,0,0.12);
+}
+
 .brand-icon {
   display: inline-flex;
   align-items: center;
